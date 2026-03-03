@@ -2,13 +2,37 @@
 import React, { useState } from "react";
 import DropdownInput from "../components/DropdownInput";
 import CustomInput from "../components/CustomInput";
+import ColorSelector from "./ColorSelector";
 
 const Stl = () => {
   const [weight, setWeight] = useState<number | string>("");
   const [material, setMaterial] = useState<string | number>("");
   const [infill, setInfill] = useState<string | number>("");
   const [shipping, setShipping] = useState<string | number>("");
-  const [quantity, setQuantity] = useState<number>(1);
+  const [quantity, setQuantity] = useState<number | string>(1);
+  const [color, setColor] = useState<string | number>("");
+
+  const handleQuantityBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    if (value === "") {
+      setQuantity(1);
+      return;
+    }
+    if (!Number.isInteger(Number(value))) return;
+  };
+  const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    if (value === "") {
+      setQuantity("");
+      return;
+    }
+    if (!Number.isInteger(Number(value))) return;
+    if (Number.parseInt(value, 10) < 1) {
+      setQuantity(1);
+      return;
+    }
+    setQuantity(Number.parseInt(value, 10));
+  };
 
   const handleWeightChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -64,11 +88,13 @@ const Stl = () => {
               { label: "100%", value: 5 },
             ]}
           />
+          <ColorSelector value={color} onChange={(value) => setColor(value)} />
           <CustomInput
             className="mb-4"
             label="Quantity"
             value={quantity}
-            onChange={(value) => setQuantity(value)}
+            onChange={handleQuantityChange}
+            onBlur={handleQuantityBlur}
           />
           <DropdownInput
             className="mb-4"
