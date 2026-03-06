@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import DropdownInput from "../components/DropdownInput";
 import CustomInput from "../components/CustomInput";
 import ColorSelector from "./ColorSelector";
+import STLViewer from "../components/STLViewer";
 
 const Stl = () => {
   const [weight, setWeight] = useState<number | string>("");
@@ -15,6 +16,10 @@ const Stl = () => {
   const [infillCost, setInfillCost] = useState(0);
   const [deliveryCost, setDeliveryCost] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [stlFile, setStlFile] = useState<string | null>(null);
+  const [fileUrl, setFileUrl] = useState("");
+
+  <p className="text-white">{fileUrl}</p>;
 
   const handleQuantityBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -45,6 +50,16 @@ const Stl = () => {
       return;
     }
     setWeight(Number(value));
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const url = URL.createObjectURL(file);
+
+    setStlFile(file);
+    setFileUrl(url);
   };
 
   const calculatePrice = () => {
@@ -97,12 +112,31 @@ const Stl = () => {
       <h2 className="text-2xl text-center mb-8">Upload & Get Instant Quote</h2>
       <div className="flex gap-10">
         <div className="w-100 text-center">
-          <div className="border h-100 w-100" />
-          <button className="p-2 bg-[#a88d32] w-full font-bold text-black text-xl">
-            UPLOAD MODEL
-          </button>
+          <div className="border-2 border-dashed border-yellow-500 rounded-xl h-[420px] w-[420px] relative overflow-hidden flex items-center justify-center">
+            {fileUrl ? (
+              <div className="absolute inset-0">
+                <STLViewer fileUrl={fileUrl} />
+              </div>
+            ) : (
+              <>
+                <p className="text-yellow-400 text-lg font-bold">
+                  Drop your STL file here
+                </p>
+
+                <p className="text-gray-400 text-sm">or click to browse</p>
+
+                <input
+                  type="file"
+                  accept=".stl"
+                  onChange={handleFileUpload}
+                  className="absolute inset-0 opacity-0 cursor-pointer"
+                />
+              </>
+            )}
+          </div>
         </div>
-        <div className="flex flex-col items-center border border-yellow-500 rounded-xl p-6 w-[420px] bg-[#111]">
+
+        <div className="border border-yellow-500 rounded-xl p-6 w-[420px] bg-[#111]">
           <h3 className="text-xl font-bold text-center mb-4 flex flex-col gap-4">
             Pricing Calculator
           </h3>
