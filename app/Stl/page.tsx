@@ -136,7 +136,7 @@ const Stl = () => {
           </div>
         </div>
 
-        <div className="border border-yellow-500 rounded-xl p-6 w-[420px] bg-[#111]">
+        <div className="border border-yellow-500 rounded-xl p-6 w-[420px] bg-[#111] flex flex-col items-center justify-center">
           <h3 className="text-xl font-bold text-center mb-4 flex flex-col gap-4">
             Pricing Calculator
           </h3>
