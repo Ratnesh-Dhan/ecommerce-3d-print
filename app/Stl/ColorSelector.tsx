@@ -14,17 +14,20 @@ const ColorSelector = ({ value, onChange }: ColorSelectorProps) => {
 
   return (
     <div className="mb-4">
-      <div className="flex items-center justify-between">
+      <div className=" items-center justify-between w-72">
+        <span className="text-sm text-gray-500 ml-3 font-bold">
+          Select Color
+        </span>
         <button
-          className="text-sm text-gray-500 mb-1 block ml-3"
+          className=" text-gray-500 mb-1 block py-3 px-4 bg-white flex w-full justify-between rounded-2xl"
           onClick={() => setOpen(!open)}
         >
-          Select Color
+          Selected color :
+          <div
+            className="w-5 h-5 rounded-xs border border-gray-300"
+            style={{ backgroundColor: value as string }}
+          />
         </button>
-        <div
-          className="w-5 h-5 rounded-xs border border-gray-300"
-          style={{ backgroundColor: value as string }}
-        />
       </div>
 
       {open && (

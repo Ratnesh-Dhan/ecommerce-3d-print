@@ -47,51 +47,50 @@ const Stl = () => {
     setWeight(Number(value));
   };
 
-
   const calculatePrice = () => {
     if (!weight || !material) return;
-  
+
     let materialRate = 0;
-  
+
     if (material === 1) materialRate = 10;
     if (material === 2) materialRate = 15;
     if (material === 3) materialRate = 25;
     if (material === 4) materialRate = 40;
-  
+
     const baseMaterialCost = Number(weight) * materialRate;
-  
+
     const infillMultiplier = {
       1: 0,
-      2: 0.10,
+      2: 0.1,
       3: 0.25,
-      4: 0.40,
-      5: 0.60,
+      4: 0.4,
+      5: 0.6,
     };
-  
+
     const infillAdjustment =
-     baseMaterialCost * (infillMultiplier[infill as number] || 0);
-  
+      baseMaterialCost * (infillMultiplier[infill as number] || 0);
+
     const shippingMultiplier = {
       1: 0,
       2: 50,
       3: 100,
     };
-  
-    const shippingValue =
-      shippingMultiplier[shipping as number] || 0;
-  
-      const total =
-      (baseMaterialCost + infillAdjustment + shippingValue) *      Number(quantity || 1);
-  
+
+    const shippingValue = shippingMultiplier[shipping as number] || 0;
+
+    const total =
+      (baseMaterialCost + infillAdjustment + shippingValue) *
+      Number(quantity || 1);
+
     setMaterialCost(baseMaterialCost);
     setInfillCost(infillAdjustment);
     setDeliveryCost(shippingValue);
     setTotalPrice(total);
-  }; 
+  };
 
   useEffect(() => {
     calculatePrice();
-  }, [weight, material, infill, quantity, shipping]); 
+  }, [weight, material, infill, quantity, shipping]);
 
   return (
     <div className="p-20">
@@ -103,7 +102,7 @@ const Stl = () => {
             UPLOAD MODEL
           </button>
         </div>
-        <div className="border border-yellow-500 rounded-xl p-6 w-[420px] bg-[#111]">
+        <div className="flex flex-col items-center border border-yellow-500 rounded-xl p-6 w-[420px] bg-[#111]">
           <h3 className="text-xl font-bold text-center mb-4 flex flex-col gap-4">
             Pricing Calculator
           </h3>
@@ -159,38 +158,38 @@ const Stl = () => {
             ]}
           />
 
-<div className="mt-6 border border-yellow-500 rounded-xl p-5 w-80">
-  <h3 className="text-yellow-400 font-bold text-center mb-4">
-    Price Breakdown
-  </h3>
+          <div className="mt-6 border border-yellow-500 rounded-xl p-5 w-80">
+            <h3 className="text-yellow-400 font-bold text-center mb-4">
+              Price Breakdown
+            </h3>
 
-  <div className="flex justify-between text-sm mb-2">
-    <span>Material Cost:</span>
-    <span>₹{materialCost}</span>
-  </div>
+            <div className="flex justify-between text-sm mb-2">
+              <span>Material Cost:</span>
+              <span>₹{materialCost}</span>
+            </div>
 
-  <div className="flex justify-between text-sm mb-2">
-    <span>Infill Adjustment:</span>
-    <span>₹{infillCost}</span>
-  </div>
+            <div className="flex justify-between text-sm mb-2">
+              <span>Infill Adjustment:</span>
+              <span>₹{infillCost}</span>
+            </div>
 
-  <div className="flex justify-between text-sm mb-2">
-    <span>Quantity Multiplier:</span>
-    <span>x{quantity}</span>
-  </div>
+            <div className="flex justify-between text-sm mb-2">
+              <span>Quantity Multiplier:</span>
+              <span>x{quantity}</span>
+            </div>
 
-  <div className="flex justify-between text-sm mb-2">
-    <span>Delivery:</span>
-    <span>₹{deliveryCost}</span>
-  </div>
+            <div className="flex justify-between text-sm mb-2">
+              <span>Delivery:</span>
+              <span>₹{deliveryCost}</span>
+            </div>
 
-  <hr className="my-3 border-yellow-500" />
+            <hr className="my-3 border-yellow-500" />
 
-  <div className="flex justify-between font-bold text-lg">
-    <span>TOTAL:</span>
-    <span>₹{totalPrice}</span>
-  </div>
-</div>
+            <div className="flex justify-between font-bold text-lg">
+              <span>TOTAL:</span>
+              <span>₹{totalPrice}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

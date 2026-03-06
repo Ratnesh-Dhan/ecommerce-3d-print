@@ -27,7 +27,9 @@ export default function DropdownInput({
 
   return (
     <div className={`w-72 relative font-sans ${className}`} ref={ref}>
-      <label className="text-sm text-gray-500 mb-1 block ml-3">{label}</label>
+      <label className="text-sm text-gray-500 mb-1 block ml-3 font-bold">
+        {label}
+      </label>
 
       {/* Input Box */}
       <button
