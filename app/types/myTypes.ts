@@ -15,6 +15,7 @@ export interface CustomInputProps {
   className: string;
   label: string;
   value: number | string;
+  readOnly?: boolean
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
 }

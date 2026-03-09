@@ -5,6 +5,7 @@ const CustomInput = ({
   className,
   label,
   value,
+  readOnly,
   onChange,
   onBlur,
 }: CustomInputProps) => {
@@ -18,6 +19,7 @@ const CustomInput = ({
         type="number"
         value={value}
         onBlur={onBlur}
+        readOnly={readOnly}
         onChange={onChange}
       />
     </div>
