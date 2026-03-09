@@ -1,9 +1,9 @@
 "use client";
 
 import { Canvas, useLoader } from "@react-three/fiber";
-import { OrbitControls, Grid, Text} from "@react-three/drei";
+import { OrbitControls, Grid, Text, TransformControls} from "@react-three/drei";
 import { STLLoader } from "three-stdlib";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 import * as THREE from "three";
 import { Bold } from "lucide-react";
@@ -24,8 +24,9 @@ function calculateVolume(geometry: THREE.BufferGeometry) {
 }
 
 
-function Model({ url, color, onVolume, onDimensions }: any) {
+function Model({ url, color, onVolume, onDimensions, meshRef }: any) {
   const geometry = useLoader(STLLoader, url);
+  const meshref = useRef<any>();
 
   geometry.computeBoundingBox();
 
@@ -60,7 +61,7 @@ function Model({ url, color, onVolume, onDimensions }: any) {
   }, []);
 
   return (
-    <mesh geometry={geometry} scale={scale}>
+    <mesh ref={meshRef} geometry={geometry} scale={scale}>
       <meshStandardMaterial color={color || "#FFFFFF"} 
                             roughness={0.4}
                             metalness={0.1}
@@ -80,6 +81,20 @@ export default function STLViewer({ fileUrl, color, onVolume, onDimensions }: an
       controlsRef.current.reset();
     }
   };
+
+  const [mode, setMode] = useState("rotate");
+
+  const meshRef = useRef<any>(null);
+
+  const dropToPlate = () => {
+    if (!meshRef.current) return;
+  
+    const box = new THREE.Box3().setFromObject(meshRef.current);
+    const minY = box.min.y;
+  
+    meshRef.current.position.y -= minY;
+  };
+
   
   return (
     <div ref = {containerRef} className = "w-full h-full relative">
@@ -89,6 +104,23 @@ export default function STLViewer({ fileUrl, color, onVolume, onDimensions }: an
     >
       Reset View
     </button>
+
+
+  <div className="absolute top-3 left-3 z-10 flex gap-2">
+    <button
+      onClick={() => setMode("rotate")}
+      className="bg-yellow-500 px-3 py-1 rounded text-black font-bold"
+    >
+      Rotate
+    </button>
+
+    <button
+      onClick={() => setMode("translate")}
+      className="bg-yellow-500 px-3 py-1 rounded text-black font-bold"
+    >
+      Move
+    </button>
+  </div>
 
       
   <Canvas
@@ -137,13 +169,21 @@ export default function STLViewer({ fileUrl, color, onVolume, onDimensions }: an
       Z
     </Text>
 
-
+   <TransformControls 
+    mode={mode}
+    space="local"
+    rotationSnap={THREE.MathUtils.degToRad(5)}
+    onMouseDown={() => (controlsRef.current.enabled = false)}
+    onMouseUp={() => {controlsRef.current.enabled = true
+                     dropToPlate();}}
+    >
     <Model 
       url={fileUrl} 
       color={color}
       onVolume={onVolume} 
       onDimensions={onDimensions}
     />
+    </TransformControls>
 
     <OrbitControls
       ref={controlsRef}
