@@ -4,8 +4,11 @@ import DropdownInput from "../components/DropdownInput";
 import CustomInput from "../components/CustomInput";
 import ColorSelector from "./ColorSelector";
 import STLViewer from "../components/STLViewer";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const Stl = () => {
+  const router = useRouter();
   const [weight, setWeight] = useState<number | string>("");
   const [material, setMaterial] = useState<string | number>("");
   const [infill, setInfill] = useState<string | number>("");
@@ -116,6 +119,23 @@ const Stl = () => {
     e.dataTransfer.clearData();
   };
 
+  const handleProceed = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (material === "" || infill === "" || shipping === "" || color === "") {
+      if (material === "") {
+        toast.error("Please select a material");
+      } else if (infill === "") {
+        toast.error("Please select an infill");
+      } else if (shipping === "") {
+        toast.error("Please select a shipping option");
+      } else if (color === "") {
+        toast.error("Please select a color");
+      }
+    } else {
+      toast.success("yay ! lets procced.");
+      router.push("/CustomerDetails");
+    }
+  };
   const calculatePrice = () => {
     if (!weight || !material) return;
 
@@ -251,7 +271,7 @@ const Stl = () => {
 
           {fileUrl && (
             <div className="mt-4 flex justify-center w-[420px]">
-              <label className="bg-yellow-500 text-black px-4 py-2 rounded-lg font-bold cursor-pointer hover:bg-yellow-400">
+              <label className="bg-linear-to-r from-yellow-500 to-amber-500 hover:from-amber-500 hover:to-yellow-500 text-black px-4 py-2 rounded-lg font-bold cursor-pointer">
                 Upload New STL
                 <input
                   type="file"
@@ -264,38 +284,48 @@ const Stl = () => {
           )}
 
           {fileUrl && (
-            <div className="mt-4 w-[420px] border border-yellow-500 rounded-xl bg-gradient-to-b from-[#111] to-[#050505]       p-4">
-              <h3 className="text-yellow-400 font-bold text-center mb-4">
-                Model Information
-              </h3>
+            <div>
+              <div className="mt-4 w-[420px] border border-yellow-500 rounded-xl bg-gradient-to-b from-[#111] to-[#050505]       p-4">
+                <h3 className="text-yellow-400 font-bold text-center mb-4">
+                  Model Information
+                </h3>
+                <div className="grid grid-cols-3 text-center border border-yellow-500 rounded-lg overflow-hidden">
+                  {/* Header */}
+                  <div className="bg-yellow-500 text-black font-bold py-2">
+                    Volume
+                  </div>
+                  <div className="bg-yellow-500 text-black font-bold py-2">
+                    Dimensions
+                  </div>
+                  <div className="bg-yellow-500 text-black font-bold py-2">
+                    Print Time
+                  </div>
 
-              <div className="grid grid-cols-3 text-center border border-yellow-500 rounded-lg overflow-hidden">
-                {/* Header */}
-                <div className="bg-yellow-500 text-black font-bold py-2">
-                  Volume
-                </div>
-                <div className="bg-yellow-500 text-black font-bold py-2">
-                  Dimensions
-                </div>
-                <div className="bg-yellow-500 text-black font-bold py-2">
-                  Print Time
-                </div>
+                  {/* Values */}
+                  <div className="py-3 border-t border-yellow-500">
+                    {volume ? (volume / 1000).toFixed(2) + " cm³" : "-"}
+                  </div>
 
-                {/* Values */}
-                <div className="py-3 border-t border-yellow-500">
-                  {volume ? (volume / 1000).toFixed(2) + " cm³" : "-"}
-                </div>
+                  <div className="py-3 border-t border-yellow-500">
+                    {dimensions
+                      ? `${dimensions.x.toFixed(1)} × ${dimensions.y.toFixed(1)} × ${dimensions.z.toFixed(1)} mm`
+                      : "-"}
+                  </div>
 
-                <div className="py-3 border-t border-yellow-500">
-                  {dimensions
-                    ? `${dimensions.x.toFixed(1)} × ${dimensions.y.toFixed(1)} × ${dimensions.z.toFixed(1)} mm`
-                    : "-"}
-                </div>
-
-                <div className="py-3 border-t border-yellow-500">
-                  {printTime ? `${printTime} hrs` : "-"}
+                  <div className="py-3 border-t border-yellow-500">
+                    {printTime ? `${printTime} hrs` : "-"}
+                  </div>
                 </div>
               </div>
+              <br />
+              {
+                <button
+                  className="mt-10 border border-black rounded-xl text-black font-bold py-3 px-15 bg-linear-to-r from-yellow-500 to-amber-500 text-xl hover:from-amber-500 hover:to-yellow-500 active:from-emerald-500 active:to-amber-400 cursor-pointer "
+                  onClick={handleProceed}
+                >
+                  PROCEED !
+                </button>
+              }
             </div>
           )}
 
