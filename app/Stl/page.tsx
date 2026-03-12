@@ -24,6 +24,8 @@ const Stl = () => {
     y: 0,
     z: 0
   });
+  const [buildError, setBuildError] = useState(false);
+  const[dragActive, setDragActive] = useState(false);
   const [printTime, setPrintTime] = useState<number | null>(null);
 
   <p className="text-white">{fileUrl}</p>;
@@ -70,7 +72,8 @@ const Stl = () => {
     setVolume(null)
     setDimensions({x:0, y:0, z:0});
     setPrintTime(null)
-
+    
+    event.target.value = "";
 
      // reset pricing calculator
     setMaterial("");
@@ -81,6 +84,38 @@ const Stl = () => {
     setTotalPrice(0);
     };
 
+
+    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      setDragActive(true);
+    };
+    
+    const handleDragLeave = () => {
+      setDragActive(false);
+    };
+    
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      setDragActive(false);
+    
+      const files = e.dataTransfer.files;
+      if (!files || files.length === 0) return;
+    
+      const file = files[0];
+      if (!file.name.toLowerCase().endsWith(".stl")) return;
+    
+      const url = URL.createObjectURL(file);
+    
+      setStlFile(file);
+      setFileUrl(url);
+    
+      setVolume(null);
+      setDimensions(null);
+      setPrintTime(null);
+    
+      // clear drag memory
+      e.dataTransfer.clearData();
+    };
 
   const calculatePrice = () => {
     if (!weight || !material) return;
@@ -178,24 +213,41 @@ const Stl = () => {
       <h2 className="text-2xl text-center mb-8">Upload & Get Instant Quote</h2>
       <div className="flex gap-10">
         <div className="w-100 text-center">
-         <div className="border border-yellow-500 rounded-xl h-[420px] w-[420px] relative overflow-hidden flex items-center justify-center bg-[#0b0b0b] shadow-[0_0_30px_rgba(255,204,0,0.15)]">
+        <div
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          className={`border border-yellow-500 rounded-xl h-[420px] w-[420px] relative overflow-hidden flex items-center justify-center shadow-[0_0_30px_rgba(255,204,0,0.15)] transition-all duration-200
+          ${dragActive ? "bg-yellow-500/20 scale-105" : "bg-[#0b0b0b]"}`}
+        >
             {fileUrl ? (
               <div className="absolute inset-0">
-                <STLViewer fileUrl={fileUrl} 
+                <STLViewer 
                 key={fileUrl}
+                fileUrl={fileUrl} 
                 color={color}
                 onVolume={(v)=>setVolume(v)}
-                onDimensions={(d)=>setDimensions(d)}
+                onDimensions={(d)=> {setDimensions(d);
+
+                  if(d.x > 220 || d.y >220 || d.z > 250){
+                    setBuildError(true);
+                  }
+                  else{
+                    setBuildError(false);
+                  }
+                }}
                 />
               </div>
               
             ) : (
               <>
                 <p className="text-yellow-400 text-lg font-bold">
-                  Drop your STL file here
+                  Drag & Drop your STL file here
                 </p>
 
-                <p className="text-gray-400 text-sm">or click to browse</p>
+                <p className="text-gray-400 text-sm">
+                  or click to browse
+                  </p>
 
                 <input
                   type="file"
@@ -223,7 +275,7 @@ const Stl = () => {
 )}
 
           {fileUrl && (
-  <div className="mt-4 w-[420px] border border-yellow-500 rounded-xl bg-gradient-to-b from-[#111] to-[#050505] p-4">
+  <div className="mt-4 w-[420px] border border-yellow-500 rounded-xl bg-gradient-to-b from-[#111] to-[#050505]       p-4">
 
     <h3 className="text-yellow-400 font-bold text-center mb-4">
       Model Information
@@ -242,7 +294,9 @@ const Stl = () => {
       </div>
 
       <div className="py-3 border-t border-yellow-500">
-        {`${dimensions.x.toFixed(1)} × ${dimensions.y.toFixed(1)} × ${dimensions.z.toFixed(1)} mm`}
+      {dimensions
+      ? `${dimensions.x.toFixed(1)} × ${dimensions.y.toFixed(1)} × ${dimensions.z.toFixed(1)} mm`
+      : "-"}
       </div>
 
       <div className="py-3 border-t border-yellow-500">
@@ -252,6 +306,12 @@ const Stl = () => {
     </div>
   </div>
 )}
+
+    {buildError && (
+      <div className="mt-3 w-[420px] bg-red-500 text-white text-sm font-bold text-center py-2 rounded-lg">
+        ⚠ Model exceeds printer build volume (220 × 220 × 250 mm)
+      </div>
+    )}
 
         </div>
 

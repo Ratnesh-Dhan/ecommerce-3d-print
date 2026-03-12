@@ -26,7 +26,7 @@ function calculateVolume(geometry: THREE.BufferGeometry) {
 
 function Model({ url, color, onVolume, onDimensions, meshRef }: any) {
   const geometry = useLoader(STLLoader, url);
-  const meshref = useRef<any>();
+  // const meshref = useRef<THREE.Mesh>(null);
 
   geometry.computeBoundingBox();
 
@@ -72,19 +72,41 @@ function Model({ url, color, onVolume, onDimensions, meshRef }: any) {
 
   
 export default function STLViewer({ fileUrl, color, onVolume, onDimensions }: any) {
-  if (!fileUrl) return null;
    
   const containerRef = useRef(null); 
   const controlsRef = useRef<any>(null);
+  const transformRef = useRef<any>(null);
+  const meshRef = useRef<any>(null);
+
+  const [mode, setMode] = useState("translate");
+  // const [mode, setMode] = useState("rotate");
+
+  if (!fileUrl) return null;
+
+
   const resetView = () => {
     if(controlsRef.current){
       controlsRef.current.reset();
     }
+
+    // if(meshRef.current){
+    //   meshRef.current.position.set(0,0,0);
+    //   meshRef.current.rotation.set(0,0,0);
+
+    //   transformRef.current.attach(meshRef.current);
+    // }
+
+    if(transformRef.current){
+      transformRef.current.object.position.set(0,0,0);
+      transformRef.current.object.rotation.set(0,0,0);
+      transformRef.current.updateMatrixWorld();
+    }
+
+    dropToPlate();
   };
 
-  const [mode, setMode] = useState("rotate");
 
-  const meshRef = useRef<any>(null);
+
 
   const dropToPlate = () => {
     if (!meshRef.current) return;
@@ -92,7 +114,9 @@ export default function STLViewer({ fileUrl, color, onVolume, onDimensions }: an
     const box = new THREE.Box3().setFromObject(meshRef.current);
     const minY = box.min.y;
   
-    meshRef.current.position.y -= minY;
+    if (minY < 0) {
+      meshRef.current.position.y -= minY;
+    }
   };
 
   
@@ -107,12 +131,12 @@ export default function STLViewer({ fileUrl, color, onVolume, onDimensions }: an
 
 
   <div className="absolute top-3 left-3 z-10 flex gap-2">
-    <button
+    {/* <button
       onClick={() => setMode("rotate")}
       className="bg-yellow-500 px-3 py-1 rounded text-black font-bold"
     >
       Rotate
-    </button>
+    </button> */}
 
     <button
       onClick={() => setMode("translate")}
@@ -170,18 +194,20 @@ export default function STLViewer({ fileUrl, color, onVolume, onDimensions }: an
     </Text>
 
    <TransformControls 
-    mode={mode}
+    ref={transformRef}
+    mode="translate"
     space="local"
     rotationSnap={THREE.MathUtils.degToRad(5)}
     onMouseDown={() => (controlsRef.current.enabled = false)}
-    onMouseUp={() => {controlsRef.current.enabled = true
-                     dropToPlate();}}
+    onMouseUp={() => (controlsRef.current.enabled = true)}
+    onObjectChange={dropToPlate}
     >
     <Model 
       url={fileUrl} 
       color={color}
       onVolume={onVolume} 
       onDimensions={onDimensions}
+      meshRef={meshRef} 
     />
     </TransformControls>
 
