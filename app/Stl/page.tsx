@@ -18,14 +18,14 @@ const Stl = () => {
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const [stlFile, setStlFile] = useState<string | null>(null);
   const [fileUrl, setFileUrl] = useState("");
-  const [volume, setVolume] = useState<number | null>(null)
+  const [volume, setVolume] = useState<number | null>(null);
   const [dimensions, setDimensions] = useState({
     x: 0,
     y: 0,
-    z: 0
+    z: 0,
   });
   const [buildError, setBuildError] = useState(false);
-  const[dragActive, setDragActive] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
   const [printTime, setPrintTime] = useState<number | null>(null);
 
   <p className="text-white">{fileUrl}</p>;
@@ -69,53 +69,52 @@ const Stl = () => {
 
     setStlFile(file);
     setFileUrl(url);
-    setVolume(null)
-    setDimensions({x:0, y:0, z:0});
-    setPrintTime(null)
-    
+    setVolume(null);
+    setDimensions({ x: 0, y: 0, z: 0 });
+    setPrintTime(null);
+
     event.target.value = "";
 
-     // reset pricing calculator
+    // reset pricing calculator
     setMaterial("");
     setInfill("");
     setShipping(1);
     setQuantity(1);
     setWeight(0);
     setTotalPrice(0);
-    };
+  };
 
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragActive(true);
+  };
 
-    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      setDragActive(true);
-    };
-    
-    const handleDragLeave = () => {
-      setDragActive(false);
-    };
-    
-    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      setDragActive(false);
-    
-      const files = e.dataTransfer.files;
-      if (!files || files.length === 0) return;
-    
-      const file = files[0];
-      if (!file.name.toLowerCase().endsWith(".stl")) return;
-    
-      const url = URL.createObjectURL(file);
-    
-      setStlFile(file);
-      setFileUrl(url);
-    
-      setVolume(null);
-      setDimensions(null);
-      setPrintTime(null);
-    
-      // clear drag memory
-      e.dataTransfer.clearData();
-    };
+  const handleDragLeave = () => {
+    setDragActive(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragActive(false);
+
+    const files = e.dataTransfer.files;
+    if (!files || files.length === 0) return;
+
+    const file = files[0];
+    if (!file.name.toLowerCase().endsWith(".stl")) return;
+
+    const url = URL.createObjectURL(file);
+
+    setStlFile(file);
+    setFileUrl(url);
+
+    setVolume(null);
+    setDimensions(null);
+    setPrintTime(null);
+
+    // clear drag memory
+    e.dataTransfer.clearData();
+  };
 
   const calculatePrice = () => {
     if (!weight || !material) return;
@@ -140,7 +139,6 @@ const Stl = () => {
       8: 0.8,
       9: 0.9,
       10: 1,
-
     };
 
     const infillAdjustment =
@@ -152,9 +150,11 @@ const Stl = () => {
       3: 1,
     };
 
-    const subtotal = (baseMaterialCost + infillAdjustment) * Number(quantity || 1);
+    const subtotal =
+      (baseMaterialCost + infillAdjustment) * Number(quantity || 1);
 
-    const shippingValue = subtotal * (shippingMultiplier[shipping as number] || 0);
+    const shippingValue =
+      subtotal * (shippingMultiplier[shipping as number] || 0);
 
     const total = subtotal + shippingValue;
 
@@ -169,85 +169,75 @@ const Stl = () => {
   }, [weight, material, infill, quantity, shipping]);
 
   useEffect(() => {
-    if(!volume) return;
+    if (!volume) return;
 
     const materialDensity: any = {
-    1: 1.24, //PLA
-    2: 1.04, // ABS 
-    3: 1.21, //TPU in g/cm³
-    4: 1.27, // PETG
-  };
-   
+      1: 1.24, //PLA
+      2: 1.04, // ABS
+      3: 1.21, //TPU in g/cm³
+      4: 1.27, // PETG
+    };
+
     const density = materialDensity[material] || 1.24;
 
-    if(!density) return;
+    if (!density) return;
 
     const volumeCm3 = volume / 1000;
-
 
     const calculatedWeight = volumeCm3 * density;
 
     setWeight(Number(calculatedWeight.toFixed(2)));
-
-  }, [volume,material]);
-
-
+  }, [volume, material]);
 
   useEffect(() => {
+    if (!volume) return;
 
-    if (!volume) return
-  
     // convert mm³ → cm³
-    const volumeCm3 = volume / 1000
-  
-    // simple estimate (depends on printer speed)
-    const estimatedHours = volumeCm3 / 5
-  
-    setPrintTime(Number(estimatedHours.toFixed(2)))
-  
-  }, [volume])
+    const volumeCm3 = volume / 1000;
 
+    // simple estimate (depends on printer speed)
+    const estimatedHours = volumeCm3 / 5;
+
+    setPrintTime(Number(estimatedHours.toFixed(2)));
+  }, [volume]);
 
   return (
-     <div className="min-h-screen p-20 bg-gradient-to-br from-gray via-[#0f0f0f] to-[#eba613] text-white"> 
+    <div className="min-h-screen p-20 bg-gradient-to-br from-gray via-[#0f0f0f] to-[#eba613] text-white">
       <h2 className="text-2xl text-center mb-8">Upload & Get Instant Quote</h2>
       <div className="flex gap-10">
         <div className="w-100 text-center">
-        <div
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          className={`border border-yellow-500 rounded-xl h-[420px] w-[420px] relative overflow-hidden flex items-center justify-center shadow-[0_0_30px_rgba(255,204,0,0.15)] transition-all duration-200
+          <div
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            className={`border border-yellow-500 rounded-xl h-[420px] w-[420px] relative overflow-hidden flex items-center justify-center shadow-[0_0_30px_rgba(255,204,0,0.15)] transition-all duration-200
           ${dragActive ? "bg-yellow-500/20 scale-105" : "bg-[#0b0b0b]"}`}
-        >
+          >
             {fileUrl ? (
               <div className="absolute inset-0">
-                <STLViewer 
-                key={fileUrl}
-                fileUrl={fileUrl} 
-                color={color}
-                onVolume={(v)=>setVolume(v)}
-                onDimensions={(d)=> {setDimensions(d);
+                <STLViewer
+                  key={fileUrl}
+                  fileUrl={fileUrl}
+                  color={color}
+                  onVolume={(v) => setVolume(v)}
+                  onDimensions={(d) => {
+                    setDimensions(d);
 
-                  if(d.x > 220 || d.y >220 || d.z > 250){
-                    setBuildError(true);
-                  }
-                  else{
-                    setBuildError(false);
-                  }
-                }}
+                    if (d.x > 220 || d.y > 220 || d.z > 250) {
+                      setBuildError(true);
+                    } else {
+                      setBuildError(false);
+                    }
+                  }}
                 />
               </div>
-              
             ) : (
               <>
                 <p className="text-yellow-400 text-lg font-bold">
                   Drag & Drop your STL file here
                 </p>
 
-                <p className="text-gray-400 text-sm">
-                  or click to browse
-                  </p>
+                <p className="text-gray-400 text-sm">or click to browse</p>
 
                 <input
                   type="file"
@@ -260,62 +250,63 @@ const Stl = () => {
           </div>
 
           {fileUrl && (
-  <div className="mt-4 flex justify-center w-[420px]">
-    <label className="bg-yellow-500 text-black px-4 py-2 rounded-lg font-bold cursor-pointer hover:bg-yellow-400">
-      Upload New STL
-
-      <input
-        type="file"
-        accept=".stl"
-        onChange={handleFileUpload}
-        className="hidden"
-      />
-    </label>
-  </div>
-)}
+            <div className="mt-4 flex justify-center w-[420px]">
+              <label className="bg-yellow-500 text-black px-4 py-2 rounded-lg font-bold cursor-pointer hover:bg-yellow-400">
+                Upload New STL
+                <input
+                  type="file"
+                  accept=".stl"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                />
+              </label>
+            </div>
+          )}
 
           {fileUrl && (
-  <div className="mt-4 w-[420px] border border-yellow-500 rounded-xl bg-gradient-to-b from-[#111] to-[#050505]       p-4">
+            <div className="mt-4 w-[420px] border border-yellow-500 rounded-xl bg-gradient-to-b from-[#111] to-[#050505]       p-4">
+              <h3 className="text-yellow-400 font-bold text-center mb-4">
+                Model Information
+              </h3>
 
-    <h3 className="text-yellow-400 font-bold text-center mb-4">
-      Model Information
-    </h3>
+              <div className="grid grid-cols-3 text-center border border-yellow-500 rounded-lg overflow-hidden">
+                {/* Header */}
+                <div className="bg-yellow-500 text-black font-bold py-2">
+                  Volume
+                </div>
+                <div className="bg-yellow-500 text-black font-bold py-2">
+                  Dimensions
+                </div>
+                <div className="bg-yellow-500 text-black font-bold py-2">
+                  Print Time
+                </div>
 
-    <div className="grid grid-cols-3 text-center border border-yellow-500 rounded-lg overflow-hidden">
+                {/* Values */}
+                <div className="py-3 border-t border-yellow-500">
+                  {volume ? (volume / 1000).toFixed(2) + " cm³" : "-"}
+                </div>
 
-      {/* Header */}
-      <div className="bg-yellow-500 text-black font-bold py-2">Volume</div>
-      <div className="bg-yellow-500 text-black font-bold py-2">Dimensions</div>
-      <div className="bg-yellow-500 text-black font-bold py-2">Print Time</div>
+                <div className="py-3 border-t border-yellow-500">
+                  {dimensions
+                    ? `${dimensions.x.toFixed(1)} × ${dimensions.y.toFixed(1)} × ${dimensions.z.toFixed(1)} mm`
+                    : "-"}
+                </div>
 
-      {/* Values */}
-      <div className="py-3 border-t border-yellow-500">
-        {volume ? (volume / 1000).toFixed(2) + " cm³" : "-"}
-      </div>
+                <div className="py-3 border-t border-yellow-500">
+                  {printTime ? `${printTime} hrs` : "-"}
+                </div>
+              </div>
+            </div>
+          )}
 
-      <div className="py-3 border-t border-yellow-500">
-      {dimensions
-      ? `${dimensions.x.toFixed(1)} × ${dimensions.y.toFixed(1)} × ${dimensions.z.toFixed(1)} mm`
-      : "-"}
-      </div>
-
-      <div className="py-3 border-t border-yellow-500">
-        {printTime ? `${printTime} hrs` : "-"}
-      </div>
-
-    </div>
-  </div>
-)}
-
-    {buildError && (
-      <div className="mt-3 w-[420px] bg-red-500 text-white text-sm font-bold text-center py-2 rounded-lg">
-        ⚠ Model exceeds printer build volume (220 × 220 × 250 mm)
-      </div>
-    )}
-
+          {buildError && (
+            <div className="mt-3 w-[420px] bg-red-500 text-white text-sm font-bold text-center py-2 rounded-lg">
+              ⚠ Model exceeds printer build volume (220 × 220 × 250 mm)
+            </div>
+          )}
         </div>
 
-        <div className="border border-yellow-500 rounded-xl p-6 w-[420px] bg-gradient-to-b from-[#111] to-[#050505] shadow-lg flex flex-col items-center justify-center"> 
+        <div className="border border-yellow-500 rounded-xl p-6 w-[420px] bg-gradient-to-b from-[#111] to-[#050505] shadow-lg flex flex-col items-center justify-center">
           <h3 className="text-xl font-bold text-center mb-4 flex flex-col gap-4">
             Pricing Calculator
           </h3>
