@@ -1,4 +1,16 @@
 export interface StlDataState {
-  selectedUser: any;
-  setSelectedUser: (user: any) => void;
+  weight: number | string;
+  material: number | string;
+  infill: number | string;
+  shipping: number | string;
+  quantity: number | string;
+  color: number | string;
+  stlFile: string | null;
+  setWeight: (weight: number | string) => void;
+  setMaterial: (material: number | string) => void;
+  setInfill: (infill: number | string) => void;
+  setShipping: (shipping: number | string) => void;
+  setQuantity: (quantity: number | string) => void;
+  setColor: (color: number | string) => void;
+  setStlFile: (stlFile: string | null) => void;
 }

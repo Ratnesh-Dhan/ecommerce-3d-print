@@ -6,6 +6,7 @@ import ColorSelector from "./ColorSelector";
 import STLViewer from "../components/STLViewer";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { stlDetailsStore } from "@/store/userDetails";
 
 const Stl = () => {
   const router = useRouter();
@@ -30,6 +31,15 @@ const Stl = () => {
   const [buildError, setBuildError] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [printTime, setPrintTime] = useState<number | null>(null);
+
+  // Store states
+  const setStoreWeight = stlDetailsStore((s) => s.setWeight);
+  const setStoreMaterial = stlDetailsStore((s) => s.setMaterial);
+  const setStoreInfill = stlDetailsStore((s) => s.setInfill);
+  const setStoreShipping = stlDetailsStore((s) => s.setShipping);
+  const setStoreQuantity = stlDetailsStore((s) => s.setQuantity);
+  const setStoreColor = stlDetailsStore((s) => s.setColor);
+  const setStoreStlFile = stlDetailsStore((s) => s.setStlFile);
 
   <p className="text-white">{fileUrl}</p>;
 
@@ -132,6 +142,13 @@ const Stl = () => {
         toast.error("Please select a color");
       }
     } else {
+      setStoreWeight(weight);
+      setStoreMaterial(material);
+      setStoreInfill(infill);
+      setStoreShipping(shipping);
+      setStoreQuantity(quantity);
+      setStoreColor(color);
+      setStoreStlFile(stlFile);
       toast.success("yay ! lets procced.");
       router.push("/CustomerDetails");
     }
