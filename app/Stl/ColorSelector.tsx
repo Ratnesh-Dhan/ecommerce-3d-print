@@ -4,6 +4,7 @@ import { ColorSelectorProps } from "../types/myTypes";
 
 const ColorSelector = ({ value, onChange }: ColorSelectorProps) => {
   const [open, setOpen] = useState<boolean>(false);
+  const [label, setLabel] = useState<string>("");
   const colors = [
     { label: "Black", value: "black", color: "#000000" },
     { label: "White", value: "white", color: "#FFFFFF" },
@@ -23,10 +24,13 @@ const ColorSelector = ({ value, onChange }: ColorSelectorProps) => {
           onClick={() => setOpen(!open)}
         >
           Selected color :
-          <div
-            className="w-5 h-5 rounded-xs border border-gray-300"
-            style={{ backgroundColor: value as string }}
-          />
+          <div className="flex gap-5">
+            <p className="font-bold">{label}</p>
+            <div
+              className="w-5 h-5 rounded-xs border border-gray-300"
+              style={{ backgroundColor: value as string }}
+            />
+          </div>
         </button>
       </div>
 
@@ -38,6 +42,7 @@ const ColorSelector = ({ value, onChange }: ColorSelectorProps) => {
               key={idx}
               onClick={() => {
                 onChange(color.value);
+                setLabel(color.label);
                 setOpen(!open);
               }}
             >

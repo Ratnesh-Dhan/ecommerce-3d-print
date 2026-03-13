@@ -14,3 +14,9 @@ export interface StlDataState {
   setColor: (color: number | string) => void;
   setStlFile: (stlFile: string | null) => void;
 }
+
+export interface RouterGuardState {
+  accessUserDetails: boolean;
+  enableAccessUserDetails: () => void;
+  disableAccessUserDetails: () => void;
+}

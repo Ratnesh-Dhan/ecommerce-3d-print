@@ -7,6 +7,7 @@ import STLViewer from "../components/STLViewer";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { stlDetailsStore } from "@/store/userDetails";
+import { routerGuard } from "@/store/pageAllowStore";
 
 const Stl = () => {
   const router = useRouter();
@@ -40,6 +41,10 @@ const Stl = () => {
   const setStoreQuantity = stlDetailsStore((s) => s.setQuantity);
   const setStoreColor = stlDetailsStore((s) => s.setColor);
   const setStoreStlFile = stlDetailsStore((s) => s.setStlFile);
+  const enableAccessUserDetails = routerGuard((s) => s.enableAccessUserDetails);
+  const disableAccessUserDetails = routerGuard(
+    (s) => s.disableAccessUserDetails,
+  );
 
   <p className="text-white">{fileUrl}</p>;
 
@@ -141,6 +146,8 @@ const Stl = () => {
       } else if (color === "") {
         toast.error("Please select a color");
       }
+      // Remove access when requirements didnt met
+      disableAccessUserDetails();
     } else {
       setStoreWeight(weight);
       setStoreMaterial(material);
@@ -149,6 +156,8 @@ const Stl = () => {
       setStoreQuantity(quantity);
       setStoreColor(color);
       setStoreStlFile(stlFile);
+      // Give acces when requirements met
+      enableAccessUserDetails();
       toast.success("yay ! lets procced.");
       router.push("/CustomerDetails");
     }
