@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { stlDetailsStore } from "@/store/userDetails";
 import { routerGuard } from "@/store/pageAllowStore";
+// import Hero from "../components/hero";
 
 const Stl = () => {
   const router = useRouter();
@@ -248,6 +249,10 @@ const Stl = () => {
   }, [volume]);
 
   return (
+
+    // <>
+     /* <Hero /> */
+     
     <div className="min-h-screen p-20 bg-gradient-to-br from-gray via-[#0f0f0f] to-[#eba613] text-white">
       <h2 className="text-2xl text-center mb-8">Upload & Get Instant Quote</h2>
       <div className="flex gap-10">
@@ -459,6 +464,7 @@ const Stl = () => {
         </div>
       </div>
     </div>
+    // </>
   );
 };
 

@@ -2,44 +2,34 @@
 
 import Link from "next/link";
 
-export default function Header(){
-    return(
-        <header className="w-full bg-black text-white boarder-b border-yellow-500">
- <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+export default function Header() {
+  return (
+    <header className="w-full bg-black border-b border-yellow-500/20 sticky top-0 z-50">
+      
+      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        
+        {/* LOGO */}
+        <h1 className="text-xl font-bold text-yellow-500">
+          Kamal 3D
+        </h1>
 
-    {/* Logo */}
-    <div className="text-xl font-bold text-yellow-500">
-    <Link href="/">Kamal 3D</Link>
-    </div>
+        {/* NAV */}
+        <nav className="flex items-center gap-8 text-sm">
+          <Link href="/" className="hover:text-yellow-500 transition ">
+            Home
+          </Link>
+          <Link href="/Stl" className="hover:text-yellow-500 transition">
+            STL Calculator
+          </Link>
+          <Link href="/Services" className="hover:text-yellow-500 transition">
+            Services
+          </Link>
+          <Link href="/Contact_Us" className="hover:text-yellow-500 transition">
+            Contact
+          </Link>
+        </nav>
 
-    {/* Navigation */}
-    <nav className="flex items-center gap-6 text-sm font-medium">
-    <Link href="/" className="hover:text-yellow-400 transition">
-        Home
-    </Link>
-
-    <Link href="/stl" className="hover:text-yellow-400 transition">
-        STL Calculator
-    </Link>
-
-    <Link href="/services" className="hover:text-yellow-400 transition">
-        Services
-    </Link>
-
-    <Link href="/contact" className="hover:text-yellow-400 transition">
-        Contact
-    </Link>
-    </nav>
-
-
-    {/* <Link
-    href="/stl"
-    className="bg-yellow-500 text-black px-4 py-2 rounded-md font-bold hover:bg-yellow-400 transition"
-    >
-    Upload STL
-    </Link> */}
-
-  </div>
- </header>
-    );
+      </div>
+    </header>
+  );
 }
