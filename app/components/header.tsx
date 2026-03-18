@@ -9,9 +9,12 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         
         {/* LOGO */}
-        <h1 className="text-xl font-bold text-yellow-500">
+        {/* <h1 className="text-xl font-bold text-yellow-500">
           Kamal 3D
-        </h1>
+        </h1> */}
+        <Link href="/" className="text-xl font-bold text-yellow-500 ">
+        Kamal 3D
+          </Link>
 
         {/* NAV */}
         <nav className="flex items-center gap-8 text-sm">

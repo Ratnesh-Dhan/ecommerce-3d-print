@@ -35,14 +35,14 @@ export default function Hero() {
 
           <div className="flex gap-4 mt-8">
             <a
-              href="/stl"
+              href="/Stl"
               className="bg-yellow-500 text-black px-6 py-3 rounded-lg font-bold hover:bg-yellow-400"
             >
-              Upload STL
+              Get Quote
             </a>
 
             <a
-              href="/services"
+              href="/Services"
               className="border border-yellow-500 px-6 py-3 rounded-lg hover:bg-yellow-500 hover:text-black"
             >
               Our Services

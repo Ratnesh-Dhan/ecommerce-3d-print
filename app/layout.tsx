@@ -31,7 +31,13 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`}
       >
         <Header />
-        <Toaster position="top-center" reverseOrder={false} />
+        <Toaster position="top-center"   toastOptions={{
+              style: {
+                background: "#111",
+                color: "#fff",
+                border: "1px solid #eab308",
+              },
+            }} reverseOrder={false} />
         <div className="max-w-[1200px] mx-auto">{children}</div>
          
          <Footer />
