@@ -2,7 +2,8 @@
 
 import toast from "react-hot-toast";
 
-import { useState } from "react";
+import React, { useState } from "react";
+import axios from "axios";
 
 export default function Contact() {
   const [form, setForm] = useState({
@@ -13,7 +14,7 @@ export default function Contact() {
 
   const [error, setError] = useState("");
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     // // ✅ Validation
@@ -28,10 +29,19 @@ export default function Contact() {
       setError("Enter a valid email ❌");
       return;
     }
-
-     
-    // ✅ If all good
-    toast.success("Message sent succesfully");
+    axios
+      .post("http://localhost:8000/contact", form)
+      .then((response) => {
+        console.log(response.data.message);
+        toast.success("Message sent succesfully");
+      })
+      .catch((e) => {
+        console.log(e);
+        toast.error("Error ");
+      });
+    console.log(form.name);
+    console.log(form.email);
+    console.log(form.message);
 
     // Reset form
     setForm({
@@ -43,9 +53,7 @@ export default function Contact() {
 
   return (
     <section className="min-h-screen bg-black text-white">
-
       <div className="max-w-3xl mx-auto px-6 py-20">
-
         <h1 className="text-4xl font-bold text-center mb-12">
           Contact <span className="text-yellow-500">Us</span>
         </h1>
@@ -54,11 +62,8 @@ export default function Contact() {
           onSubmit={handleSubmit}
           className="space-y-6 border border-yellow-500/30 p-8 rounded-xl"
         >
-
           {/* ERROR MESSAGE */}
-          {error && (
-            <p className="text-red-500 text-sm">{error}</p>
-          )}
+          {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <input
             type="text"
@@ -84,22 +89,19 @@ export default function Contact() {
             onChange={(e) => setForm({ ...form, message: e.target.value })}
           />
 
-        <button
-          type="submit"
-          disabled={!form.name || !form.email || !form.message}
-          className={`w-full py-3 rounded-lg font-bold ${
-            !form.name || !form.email || !form.message
-              ? "bg-gray-600 cursor-not-allowed"
-              : "bg-yellow-500 hover:bg-yellow-400 text-black"
-          }`}
-        >
-          Send Message
-        </button>
-
+          <button
+            type="submit"
+            disabled={!form.name || !form.email || !form.message}
+            className={`w-full py-3 rounded-lg font-bold ${
+              !form.name || !form.email || !form.message
+                ? "bg-gray-600 cursor-not-allowed"
+                : "bg-yellow-500 hover:bg-yellow-400 text-black"
+            }`}
+          >
+            Send Message
+          </button>
         </form>
-
       </div>
-
     </section>
   );
 }
