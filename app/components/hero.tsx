@@ -2,7 +2,6 @@
 
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import * as THREE from "three";
 
 function DemoModel() {
   return (
@@ -16,12 +15,9 @@ function DemoModel() {
 export default function Hero() {
   return (
     <section className="w-full bg-black text-white">
-
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 px-6 py-20 items-center">
-
         {/* LEFT TEXT */}
         <div>
-
           <h1 className="text-5xl font-bold leading-tight">
             Upload Your <span className="text-yellow-500">3D Model</span>
             <br />
@@ -29,8 +25,8 @@ export default function Hero() {
           </h1>
 
           <p className="text-gray-400 mt-6 text-lg">
-            Professional 3D printing service with instant STL analysis,
-            volume calculation and automatic pricing.
+            Professional 3D printing service with instant STL analysis, volume
+            calculation and automatic pricing.
           </p>
 
           <div className="flex gap-4 mt-8">
@@ -48,30 +44,20 @@ export default function Hero() {
               Our Services
             </a>
           </div>
-
         </div>
 
         {/* RIGHT 3D MODEL */}
         <div className="h-[400px]">
-
           <Canvas camera={{ position: [0, 0, 80] }}>
             <ambientLight intensity={1} />
             <directionalLight position={[50, 50, 50]} />
 
             <DemoModel />
 
-            <OrbitControls
-              enableZoom={false}
-              autoRotate
-              autoRotateSpeed={2}
-            />
-
+            <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={2} />
           </Canvas>
-
         </div>
-
       </div>
-
     </section>
   );
 }
