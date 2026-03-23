@@ -2,7 +2,7 @@
 
 import toast from "react-hot-toast";
 
-import React, { useState } from "react";
+import React, { SubmitEventHandler, useState } from "react";
 import axios from "axios";
 
 export default function Contact() {
@@ -14,9 +14,8 @@ export default function Contact() {
 
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-
     // // ✅ Validation
     // if (!form.name || !form.email || !form.message) {
     //   setError("Please fill all fields ⚠️");
