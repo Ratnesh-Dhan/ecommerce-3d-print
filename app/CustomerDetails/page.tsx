@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-// import { stlDetailsStore } from "@/store/userDetails";
+import { stlDetailsStore } from "@/store/userDetails";
 import { routerGuard } from "@/store/pageAllowStore";
 import { useRouter } from "next/navigation";
 
@@ -19,6 +19,16 @@ const CustomerDetails = () => {
     email: "",
     message: "",
   });
+
+  const {
+    weight,
+    material,
+    infill,
+    shipping,
+    quantity,
+    color,
+    stlFile,
+  } = stlDetailsStore();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -51,7 +61,7 @@ const CustomerDetails = () => {
     }
   }, []);
 
-  
+
 
   if (!check) return null;
   return (
