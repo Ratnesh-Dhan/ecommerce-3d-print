@@ -51,6 +51,8 @@ const CustomerDetails = () => {
     }
   }, []);
 
+  
+
   if (!check) return null;
   return (
     // <div>
@@ -92,11 +94,10 @@ const CustomerDetails = () => {
           className="w-full bg-red-100/20 border border-amber-400/40 text-yellow-400 px-4 py-2 rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none"
         />
         <div
-          className={`overflow-hidden transition-all duration-500 ${
-            showDelivery
-              ? "max-h-[500px] opacity-100 mt-2"
-              : "max-h-0 opacity-0"
-          }`}
+          className={`overflow-hidden transition-all duration-500 ${showDelivery
+            ? "max-h-[500px] opacity-100 mt-2"
+            : "max-h-0 opacity-0"
+            }`}
         >
           {/* <input
           name="address"
