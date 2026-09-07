@@ -4,9 +4,9 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <footer className="w-full bg-black border-t border-yellow-500/20 mt-20">
-      <div className="max-w-7xl mx-auto px-6 py-10 grid md:grid-cols-3 gap-10 text-sm text-gray-400">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 grid sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10 text-sm text-gray-400">
         {/* BRAND */}
-        <div className="flex py-8 items-center gap-5">
+        <div className="flex py-2 sm:py-8 items-center gap-4 sm:col-span-2 md:col-span-1">
           <Image
             src={"/images/main-logo.png"}
             alt="Logo"

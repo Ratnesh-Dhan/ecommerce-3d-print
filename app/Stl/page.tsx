@@ -264,15 +264,15 @@ const Stl = () => {
     // <>
     /* <Hero /> */
 
-    <div className="min-h-screen p-20 bg-gradient-to-br from-gray via-[#0f0f0f] to-[#eba613] text-white">
-      <h2 className="text-2xl text-center mb-8">Upload & Get Instant Quote</h2>
-      <div className="flex gap-10">
-        <div className="w-100 text-center">
+    <div className="min-h-screen bg-gradient-to-br from-gray via-[#0f0f0f] to-[#eba613] text-white px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-20">
+      <h2 className="text-2xl sm:text-3xl text-center mb-8">Upload & Get Instant Quote</h2>
+      <div className="max-w-5xl mx-auto flex flex-col lg:flex-row justify-center items-start gap-8 lg:gap-10">
+        <div className="w-full max-w-[420px] mx-auto text-center">
           <div
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            className={`border border-yellow-500 rounded-xl h-[420px] w-[420px] relative overflow-hidden flex items-center justify-center shadow-[0_0_30px_rgba(255,204,0,0.15)] transition-all duration-200
+            className={`border border-yellow-500 rounded-xl aspect-square w-full relative overflow-hidden flex flex-col gap-2 px-4 items-center justify-center shadow-[0_0_30px_rgba(255,204,0,0.15)] transition-all duration-200
           ${dragActive ? "bg-yellow-500/20 scale-105" : "bg-[#0b0b0b]"}`}
           >
             {fileUrl ? (
@@ -310,7 +310,7 @@ const Stl = () => {
               </>
             )}
             {uploading && (
-              <div className="mt-5 w-[420px]">
+              <div className="mt-5 w-full">
                 <div className="w-full bg-gray-700 rounded-full h-4">
                   <div
                     className="bg-yellow-400 h-4 rounded-full transition-all duration-300"
@@ -329,7 +329,7 @@ const Stl = () => {
           </div>
 
           {fileUrl && (
-            <div className="mt-4 flex justify-center w-[420px]">
+            <div className="mt-4 flex justify-center w-full">
               <label className="bg-linear-to-r from-yellow-500 to-amber-500 hover:from-amber-500 hover:to-yellow-500 text-black px-4 py-2 rounded-lg font-bold cursor-pointer">
                 Upload New STL
                 <input
@@ -344,11 +344,11 @@ const Stl = () => {
 
           {fileUrl && (
             <div>
-              <div className="mt-4 w-[420px] border border-yellow-500 rounded-xl bg-gradient-to-b from-[#111] to-[#050505]       p-4">
+              <div className="mt-4 w-full border border-yellow-500 rounded-xl bg-gradient-to-b from-[#111] to-[#050505] p-3 sm:p-4">
                 <h3 className="text-yellow-400 font-bold text-center mb-4">
                   Model Information
                 </h3>
-                <div className="grid grid-cols-3 text-center border border-yellow-500 rounded-lg overflow-hidden">
+                <div className="grid grid-cols-3 text-center text-xs sm:text-sm border border-yellow-500 rounded-lg overflow-hidden">
                   {/* Header */}
                   <div className="bg-yellow-500 text-black font-bold py-2">
                     Volume
@@ -384,7 +384,7 @@ const Stl = () => {
               {
                 <button
                   disabled={uploading || !uploadSuccess}
-                  className={`mt-10 rounded-xl py-3 px-15 text-xl font-bold
+                  className={`mt-8 rounded-xl py-3 px-6 sm:px-10 text-base sm:text-xl font-bold
                     ${
                       uploading || !uploadSuccess
                         ? "bg-gray-600 cursor-not-allowed"
@@ -403,13 +403,13 @@ const Stl = () => {
           )}
 
           {buildError && (
-            <div className="mt-3 w-[420px] bg-red-500 text-white text-sm font-bold text-center py-2 rounded-lg">
+            <div className="mt-3 w-full bg-red-500 text-white text-sm font-bold text-center py-2 px-3 rounded-lg">
               ⚠ Model exceeds printer build volume (220 × 220 × 250 mm)
             </div>
           )}
         </div>
 
-        <div className="border border-yellow-500 rounded-xl p-6 w-[420px] bg-gradient-to-b from-[#111] to-[#050505] shadow-lg flex flex-col items-center justify-center">
+        <div className="border border-yellow-500 rounded-xl p-4 sm:p-6 w-full max-w-[420px] mx-auto bg-gradient-to-b from-[#111] to-[#050505] shadow-lg flex flex-col items-center justify-center">
           <h3 className="text-xl font-bold text-center mb-4 flex flex-col gap-4">
             Pricing Calculator
           </h3>
@@ -471,7 +471,7 @@ const Stl = () => {
             ]}
           />
 
-          <div className="mt-6 border border-yellow-500 rounded-xl p-5 w-80">
+          <div className="mt-6 border border-yellow-500 rounded-xl p-4 sm:p-5 w-full max-w-sm">
             <h3 className="text-yellow-400 font-bold text-center mb-4">
               Price Breakdown
             </h3>

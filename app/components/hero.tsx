@@ -26,10 +26,10 @@ const Hero = () => {
   }, []);
   return (
     <section className="w-full bg-black text-white">
-      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 px-6 py-20 items-center">
+      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-8 lg:gap-10 px-4 sm:px-6 py-12 sm:py-16 lg:py-20 items-center">
         {/* LEFT TEXT */}
         <div>
-          <h1 className="text-5xl font-bold leading-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
             Upload Your <span className="text-yellow-500">3D Model</span>
             <br />
             Get Instant Price
@@ -40,17 +40,17 @@ const Hero = () => {
             calculation and automatic pricing.
           </h1>
 
-          <div className="flex gap-4 mt-8">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8">
             <a
               href="/Stl"
-              className="bg-yellow-500 text-black px-6 py-3 rounded-lg font-bold hover:bg-yellow-400"
+              className="bg-yellow-500 text-black px-6 py-3 rounded-lg font-bold hover:bg-yellow-400 text-center"
             >
               Get Quote
             </a>
 
             <a
               href="/Services"
-              className="border border-yellow-500 px-6 py-3 rounded-lg hover:bg-yellow-500 hover:text-black"
+              className="border border-yellow-500 px-6 py-3 rounded-lg hover:bg-yellow-500 hover:text-black text-center"
             >
               Our Services
             </a>
@@ -58,7 +58,7 @@ const Hero = () => {
         </div>
 
         {/* RIGHT 3D MODEL */}
-        <div className="h-[400px]">
+        <div className="h-[280px] sm:h-[360px] lg:h-[400px]">
           <Canvas camera={{ position: [0, 0, 80] }}>
             <ambientLight intensity={1} />
             <directionalLight position={[50, 50, 50]} />

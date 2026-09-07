@@ -14,13 +14,13 @@ const ColorSelector = ({ value, onChange }: ColorSelectorProps) => {
   ];
 
   return (
-    <div className="mb-4">
-      <div className=" items-center justify-between w-72">
+    <div className="mb-4 w-full max-w-sm relative">
+      <div className="items-center justify-between w-full">
         <span className="text-sm text-gray-500 ml-3 font-bold">
           Select Color
         </span>
         <button
-          className=" text-gray-500 mb-1 block py-3 px-4 bg-white flex w-full justify-between rounded-2xl"
+          className="text-gray-500 mb-1 block py-3 px-4 bg-white flex w-full justify-between rounded-2xl"
           onClick={() => setOpen(!open)}
         >
           Selected color :
@@ -35,10 +35,10 @@ const ColorSelector = ({ value, onChange }: ColorSelectorProps) => {
       </div>
 
       {open && (
-        <div className="absolute mt-2 bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden z-50 grid grid-cols-2 gap-2">
+        <div className="absolute mt-2 w-full bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden z-50 grid grid-cols-1 sm:grid-cols-2 gap-2">
           {colors.map((color, idx) => (
             <button
-              className="w-30 flex items-center justify-between px-4 py-3 text-left text-blue-500 hover:bg-gray-100 transition"
+              className="w-full flex items-center justify-between px-4 py-3 text-left text-blue-500 hover:bg-gray-100 transition"
               key={idx}
               onClick={() => {
                 onChange(color.value);

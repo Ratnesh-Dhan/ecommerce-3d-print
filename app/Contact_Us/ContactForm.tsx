@@ -57,15 +57,9 @@ export default function ContactForm() {
     };
 
     return (
-        <section className="min-h-screen bg-black text-white">
-            <div className="max-w-3xl mx-auto px-6 py-20">
-                <h1 className="text-4xl font-bold text-center mb-12">
-                    Contact <span className="text-yellow-500">Us</span>
-                </h1>
-
-                <form
+        <form
                     onSubmit={handleSubmit}
-                    className="space-y-6 border border-yellow-500/30 p-8 rounded-xl"
+                    className="space-y-6 border border-yellow-500/30 p-4 sm:p-8 rounded-xl"
                 >
                     {/* ERROR MESSAGE */}
                     {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -104,9 +98,7 @@ export default function ContactForm() {
                     >
                         Send Message
                     </button>
-                </form>
-            </div>
-        </section>
+        </form>
     );
 }
 

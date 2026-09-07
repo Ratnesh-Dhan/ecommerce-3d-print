@@ -10,7 +10,7 @@ const CustomInput = ({
   onBlur,
 }: CustomInputProps) => {
   return (
-    <div className={`w-72 relative font-sans ${className}`}>
+    <div className={`w-full max-w-sm relative font-sans ${className}`}>
       <label className="text-sm text-gray-500 mb-1 block ml-3 font-bold">
         {label}
       </label>

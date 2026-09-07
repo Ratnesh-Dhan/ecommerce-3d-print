@@ -21,15 +21,15 @@ export default function Services() {
   return (
     <section className="min-h-screen bg-black text-white">
 
-      <div className="max-w-7xl mx-auto px-6 py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
 
         {/* TITLE */}
-        <h1 className="text-4xl font-bold text-center mb-12">
+        <h1 className="text-3xl sm:text-4xl font-bold text-center mb-8 sm:mb-12">
           Our <span className="text-yellow-500">Services</span>
         </h1>
 
         {/* GRID */}
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 gap-5 sm:gap-8">
 
           {services.map((service, index) => (
             <div
