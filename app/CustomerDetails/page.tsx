@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { stlDetailsStore } from "@/store/userDetails";
 import { routerGuard } from "@/store/pageAllowStore";
 import { useRouter } from "next/navigation";
-import { jsPDF } from "jspdf";
+import { generateQuotationPDF } from "@/app/PDF/genrateQuotationPDF";
 import {
   CheckCircle,
   Download,
@@ -129,6 +129,7 @@ const CustomerDetails = () => {
       // If STL file exists but upload wasn't complete
       if (stlFile && (!finalFileKey || !finalFileName)) {
         const uploadResult = await uploadToR2(stlFile);
+        // const uploadResult = { fileKey: "temp", fileName: "temp" }
         finalFileKey = uploadResult.fileKey;
         finalFileName = uploadResult.fileName;
       }
@@ -165,6 +166,7 @@ const CustomerDetails = () => {
         },
       );
       const result = await response.json();
+      // const result = { success: true, message: "success", quoteId: "temp" }
       console.log(
         "confirm api call completed: ",
         result?.message,
@@ -195,148 +197,148 @@ const CustomerDetails = () => {
     await handleQuote();
   };
 
-  const handleDownloadPDF = () => {
-    if (!estimatedPrice) return;
+  // const handleDownloadPDF = () => {
+  //   if (!estimatedPrice) return;
 
-    try {
-      const doc = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-      });
+  //   try {
+  //     const doc = new jsPDF({
+  //       orientation: "portrait",
+  //       unit: "mm",
+  //       format: "a4",
+  //     });
 
-      // Brand Logo Accent
-      doc.setFillColor(0, 0, 0); // Black background for header
-      doc.rect(0, 0, 210, 40, "F");
+  //     // Brand Logo Accent
+  //     doc.setFillColor(0, 0, 0); // Black background for header
+  //     doc.rect(0, 0, 210, 40, "F");
 
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(26);
-      doc.setTextColor(234, 179, 8); // Yellow (#eab308)
-      doc.text("THREEDITRON", 20, 20);
+  //     doc.setFont("helvetica", "bold");
+  //     doc.setFontSize(26);
+  //     doc.setTextColor(234, 179, 8); // Yellow (#eab308)
+  //     doc.text("THREEDITRON", 20, 20);
 
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
-      doc.setTextColor(200, 200, 200);
-      doc.text("Online 3D Printing & Rapid Prototyping Services", 20, 28);
-      doc.text("Jamshedpur, Jharkhand, India | Phone: +91 7209827299", 20, 34);
+  //     doc.setFont("helvetica", "normal");
+  //     doc.setFontSize(10);
+  //     doc.setTextColor(200, 200, 200);
+  //     doc.text("Online 3D Printing & Rapid Prototyping Services", 20, 28);
+  //     doc.text("Jamshedpur, Jharkhand, India | Phone: +91 7209827299", 20, 34);
 
-      // Reset text color for body
-      doc.setTextColor(17, 24, 39);
+  //     // Reset text color for body
+  //     doc.setTextColor(17, 24, 39);
 
-      // Quote info right side (aligned in header)
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(12);
-      doc.setTextColor(234, 179, 8);
-      const quoteNo = `TD-${Date.now().toString().slice(-6)}`;
-      doc.text(`QUOTATION NO: ${quoteNo}`, 130, 20);
-      doc.setTextColor(255, 255, 255);
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
-      doc.text(`Date: ${new Date().toLocaleDateString()}`, 130, 28);
+  //     // Quote info right side (aligned in header)
+  //     doc.setFont("helvetica", "bold");
+  //     doc.setFontSize(12);
+  //     doc.setTextColor(234, 179, 8);
+  //     const quoteNo = `TD-${Date.now().toString().slice(-6)}`;
+  //     doc.text(`QUOTATION NO: ${quoteNo}`, 130, 20);
+  //     doc.setTextColor(255, 255, 255);
+  //     doc.setFont("helvetica", "normal");
+  //     doc.setFontSize(10);
+  //     doc.text(`Date: ${new Date().toLocaleDateString()}`, 130, 28);
 
-      // Client details card
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(12);
-      doc.setTextColor(17, 24, 39);
-      doc.text("CUSTOMER DETAILS", 20, 52);
-      doc.line(20, 54, 190, 54);
+  //     // Client details card
+  //     doc.setFont("helvetica", "bold");
+  //     doc.setFontSize(12);
+  //     doc.setTextColor(17, 24, 39);
+  //     doc.text("CUSTOMER DETAILS", 20, 52);
+  //     doc.line(20, 54, 190, 54);
 
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
-      doc.text(`Name: ${form.name}`, 20, 62);
-      doc.text(`Phone: ${form.phone}`, 20, 68);
-      doc.text(`Email: ${form.email}`, 20, 74);
-      if (showDelivery) {
-        doc.text(
-          `Delivery Address: ${form.address || ""}, ${form.city || ""}, ${form.state || ""}, ${form.pincode || ""}`,
-          20,
-          80,
-        );
-      }
+  //     doc.setFont("helvetica", "normal");
+  //     doc.setFontSize(10);
+  //     doc.text(`Name: ${form.name}`, 20, 62);
+  //     doc.text(`Phone: ${form.phone}`, 20, 68);
+  //     doc.text(`Email: ${form.email}`, 20, 74);
+  //     if (showDelivery) {
+  //       doc.text(
+  //         `Delivery Address: ${form.address || ""}, ${form.city || ""}, ${form.state || ""}, ${form.pincode || ""}`,
+  //         20,
+  //         80,
+  //       );
+  //     }
 
-      // Specifications Table
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(12);
-      doc.text("3D MODEL SPECIFICATIONS", 20, 95);
-      doc.line(20, 97, 190, 97);
+  //     // Specifications Table
+  //     doc.setFont("helvetica", "bold");
+  //     doc.setFontSize(12);
+  //     doc.text("3D MODEL SPECIFICATIONS", 20, 95);
+  //     doc.line(20, 97, 190, 97);
 
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
-      doc.text(`File Name: ${fileName || stlFile?.name || "N/A"}`, 20, 105);
-      doc.text(`Estimated Weight: ${weight || 0} grams`, 20, 111);
-      doc.text(`Selected Material: ${getMaterialLabel(material)}`, 20, 117);
-      doc.text(`Infill Density: ${Number(infill) * 10}%`, 20, 123);
-      doc.text(`Selected Color: ${color || "N/A"}`, 20, 129);
-      doc.text(`Quantity Required: ${quantity || 1}`, 20, 135);
-      doc.text(`Shipping Mode: ${getShippingLabel(shipping)}`, 20, 141);
+  //     doc.setFont("helvetica", "normal");
+  //     doc.setFontSize(10);
+  //     doc.text(`File Name: ${fileName || stlFile?.name || "N/A"}`, 20, 105);
+  //     doc.text(`Estimated Weight: ${weight || 0} grams`, 20, 111);
+  //     doc.text(`Selected Material: ${getMaterialLabel(material)}`, 20, 117);
+  //     doc.text(`Infill Density: ${Number(infill) * 10}%`, 20, 123);
+  //     doc.text(`Selected Color: ${color || "N/A"}`, 20, 129);
+  //     doc.text(`Quantity Required: ${quantity || 1}`, 20, 135);
+  //     doc.text(`Shipping Mode: ${getShippingLabel(shipping)}`, 20, 141);
 
-      // Costing section
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(12);
-      doc.text("ESTIMATED PRICE BREAKDOWN", 20, 156);
-      doc.line(20, 158, 190, 158);
+  //     // Costing section
+  //     doc.setFont("helvetica", "bold");
+  //     doc.setFontSize(12);
+  //     doc.text("ESTIMATED PRICE BREAKDOWN", 20, 156);
+  //     doc.line(20, 158, 190, 158);
 
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
-      doc.text(`Base Material Printing Cost: `, 20, 166);
-      doc.text(`₹${material || 0}`, 160, 166, { align: "right" });
+  //     doc.setFont("helvetica", "normal");
+  //     doc.setFontSize(10);
+  //     doc.text(`Base Material Printing Cost: `, 20, 166);
+  //     doc.text(`₹${material || 0}`, 160, 166, { align: "right" });
 
-      doc.text(`Infill Density Adjustment:`, 20, 172);
-      doc.text(`₹${infill || 0}`, 160, 172, { align: "right" });
+  //     doc.text(`Infill Density Adjustment:`, 20, 172);
+  //     doc.text(`₹${infill || 0}`, 160, 172, { align: "right" });
 
-      doc.text(`Shipping & Handling Fees:`, 20, 178);
-      doc.text(`₹${shipping || 0}`, 160, 178, { align: "right" });
+  //     doc.text(`Shipping & Handling Fees:`, 20, 178);
+  //     doc.text(`₹${shipping || 0}`, 160, 178, { align: "right" });
 
-      doc.line(130, 182, 170, 182);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(12);
-      doc.setTextColor(234, 179, 8);
-      doc.text(`Total Amount: ${estimatedPrice || 0}`, 20, 190);
-      doc.text(`₹${estimatedPrice || 0}`, 160, 190, {
-        align: "right",
-      });
+  //     doc.line(130, 182, 170, 182);
+  //     doc.setFont("helvetica", "bold");
+  //     doc.setFontSize(12);
+  //     doc.setTextColor(234, 179, 8);
+  //     doc.text(`Total Amount: ${estimatedPrice || 0}`, 20, 190);
+  //     doc.text(`₹${estimatedPrice || 0}`, 160, 190, {
+  //       align: "right",
+  //     });
 
-      // Terms
-      doc.setTextColor(17, 24, 39);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(11);
-      doc.text("Terms and Instructions:", 20, 210);
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(9);
-      doc.setTextColor(100, 100, 100);
-      doc.text(
-        "1. This quotation is calculated algorithmically from 3D design volumes.",
-        20,
-        217,
-      );
-      doc.text(
-        "2. Printability checks and fine-grain details will be manually validated by our team.",
-        20,
-        223,
-      );
-      doc.text(
-        "3. Our engineer will connect with you on WhatsApp/Phone to finalize colors and ship dates.",
-        20,
-        229,
-      );
+  //     // Terms
+  //     doc.setTextColor(17, 24, 39);
+  //     doc.setFont("helvetica", "bold");
+  //     doc.setFontSize(11);
+  //     doc.text("Terms and Instructions:", 20, 210);
+  //     doc.setFont("helvetica", "normal");
+  //     doc.setFontSize(9);
+  //     doc.setTextColor(100, 100, 100);
+  //     doc.text(
+  //       "1. This quotation is calculated algorithmically from 3D design volumes.",
+  //       20,
+  //       217,
+  //     );
+  //     doc.text(
+  //       "2. Printability checks and fine-grain details will be manually validated by our team.",
+  //       20,
+  //       223,
+  //     );
+  //     doc.text(
+  //       "3. Our engineer will connect with you on WhatsApp/Phone to finalize colors and ship dates.",
+  //       20,
+  //       229,
+  //     );
 
-      // Signature Area
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(10);
-      doc.setTextColor(17, 24, 39);
-      doc.text("Threeditron Sales Team", 140, 255);
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(8);
-      doc.text("Computer Generated Quotation", 140, 260);
+  //     // Signature Area
+  //     doc.setFont("helvetica", "bold");
+  //     doc.setFontSize(10);
+  //     doc.setTextColor(17, 24, 39);
+  //     doc.text("Threeditron Sales Team", 140, 255);
+  //     doc.setFont("helvetica", "normal");
+  //     doc.setFontSize(8);
+  //     doc.text("Computer Generated Quotation", 140, 260);
 
-      // doc.save(`Threeditron_Quote_${form.name.replace(/\s+/g, "_")}.pdf`);
-      doc.autoPrint();
-      window.open(doc.output("bloburl"), "_blank");
-    } catch (e) {
-      console.error("PDF generation failed:", e);
-      alert("Unable to generate PDF.");
-    }
-  };
+  //     // doc.save(`Threeditron_Quote_${form.name.replace(/\s+/g, "_")}.pdf`);
+  //     doc.autoPrint();
+  //     window.open(doc.output("bloburl"), "_blank");
+  //   } catch (e) {
+  //     console.error("PDF generation failed:", e);
+  //     alert("Unable to generate PDF.");
+  //   }
+  // };
 
   useEffect(() => {
     if (!pageAccess) {
@@ -407,11 +409,10 @@ const CustomerDetails = () => {
             />
 
             <div
-              className={`overflow-hidden transition-all duration-500 ${
-                showDelivery
-                  ? "max-h-[500px] opacity-100 mt-2 space-y-3"
-                  : "max-h-0 opacity-0"
-              }`}
+              className={`overflow-hidden transition-all duration-500 ${showDelivery
+                ? "max-h-[500px] opacity-100 mt-2 space-y-3"
+                : "max-h-0 opacity-0"
+                }`}
             >
               <textarea
                 name="address"
@@ -534,7 +535,23 @@ const CustomerDetails = () => {
             <div className="space-y-2">
               {/* PDF Download Button */}
               <button
-                onClick={handleDownloadPDF}
+                onClick={async () =>
+                  await generateQuotationPDF({
+                    form,
+                    weight,
+                    material,
+                    color,
+                    quantity,
+                    shipping,
+                    infill,
+                    estimatedPrice,
+                    fileName,
+                    stlFile,
+                    showDelivery,
+                    getMaterialLabel,
+                    getShippingLabel,
+                  })
+                }
                 className="w-full bg-yellow-500 text-black py-3 rounded-lg font-bold hover:bg-yellow-400 transition flex items-center justify-center gap-2"
               >
                 <Download size={18} />
