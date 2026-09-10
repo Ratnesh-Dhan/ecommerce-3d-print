@@ -92,7 +92,7 @@ export default function ProjectDetailPage({ params }: PageProps) {
             <div className="w-full aspect-video bg-zinc-950 rounded-2xl border border-yellow-500/10 overflow-hidden relative group">
               {activeMedia === "video" ? (
                 <video
-                  src={project.video || null}
+                  src={project.video || undefined}
                   className="w-full h-full object-cover"
                   autoPlay
                   loop
