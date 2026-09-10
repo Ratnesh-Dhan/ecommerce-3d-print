@@ -17,158 +17,162 @@ export interface Project {
 
 export const projectsData: Project[] = [
   {
-    id: "iot-weather-station",
-    title: "IoT Environmental Weather Station",
-    category: "iot",
-    description: "An ESP32-based multi-sensor solar-powered weather monitor with custom 3D printed stevenson screen chassis.",
-    details: "Integrates temperature, humidity, barometric pressure, and air quality sensors. Logs real-time data to a cloud dashboard via MQTT. Power-optimized using ESP32 deep-sleep modes to run indefinitely on solar power.",
-    tech: ["ESP32", "BME280", "Solar Shield", "PLA+ Filament", "Adafruit IO"],
-    features: ["Solar-charged battery power", "Waterproof 3D design", "Wi-Fi dashboard sync", "Deep sleep battery optimization"],
-    status: "Open Source",
-    difficulty: "Intermediate",
+    id: "quadruped-robot-dog",
+    title: "Quadruped Robot Dog for Industrial Inspection",
+    category: "robotics",
+    description: "A four-legged robotic platform designed for industrial inspection, surveillance, and operation in challenging environments.",
+    details: "The robot uses high torque servo motors, embedded controllers, cameras, and sensors to achieve autonomous movement. Designed for inspection applications in industries where human access is difficult or unsafe.",
+    tech: ["Raspberry Pi", "ESP32", "High Torque Servo Motors", "Camera Module", "IMU Sensor", "3D Printed Parts"],
+    features: [
+      "Four-legged robotic locomotion",
+      "Industrial inspection capability",
+      "Camera-based monitoring",
+      "Modular mechanical design"
+    ],
+    status: "Prototype Development",
+    difficulty: "Advanced",
     images: [
-      "https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1615840287214-7fe58a8b668f?auto=format&fit=crop&w=800&q=80"
+      "/images/robodog/Robodog_IMG.jpg",
+      "/images/robodog/Robodog_IMG-2.jpg",
+      "/images/robodog/Robodog_IMG-3.jpg",
+      "/images/robodog/Robodog_IMG-4.jpg",
+      "/images/robodog/Robodog_IMG-5.jpg",
+
     ],
     video: "https://assets.mixkit.co/videos/preview/mixkit-circuit-board-of-a-computer-close-up-23114-large.mp4",
-    schematics: "ESP32 pins used: GPIO 21 (SDA), GPIO 22 (SCL) connected to BME280 sensor module. Battery voltage read through resistor divider on GPIO 34. Output regulated through AP2112 3.3V LDO for ultra-low quiescent current.",
-    codeSnippet: `#include <WiFi.h>
-#include <Wire.h>
-#include <Adafruit_BME280.h>
+    schematics: "Robot architecture consists of servo motor controllers connected with ESP32 for motion control. Raspberry Pi handles high-level processing, camera input, and AI-based inspection tasks.",
+    codeSnippet: `// Servo control example
+                    #include <Servo.h>
 
-#define uS_TO_S_FACTOR 1000000ULL  /* Conversion factor for micro seconds to seconds */
-#define TIME_TO_SLEEP  900        /* Time ESP32 will go to sleep (in seconds) */
+                    Servo legServo;
 
-Adafruit_BME280 bme;
+                    void setup() {
+                      legServo.attach(18);
+                    }
 
-void setup() {
-  Serial.begin(115200);
-  if (!bme.begin(0x76)) {
-    Serial.println("BME280 sensor error!");
-    while (1);
-  }
-  
-  // Read Data
-  float temp = bme.readTemperature();
-  float hum = bme.readHumidity();
-  
-  // Connect WiFi and send via MQTT...
-  sendDataToCloud(temp, hum);
-  
-  // Go to sleep
-  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
-  esp_deep_sleep_start();
-}`,
+                    void loop() {
+                      legServo.write(90);
+                      delay(1000);
+                    }`,
     bom: [
-      { item: "ESP32 NodeMCU Module", qty: 1 },
-      { item: "BME280 Sensor Breakout", qty: 1 },
-      { item: "18650 Li-ion Battery & Holder", qty: 1 },
-      { item: "5V 1W Solar Panel", qty: 1 },
-      { item: "TP4056 Solar Charge Circuit", qty: 1 },
-      { item: "3D Printed Stevenson Shield Case (PLA+)", qty: 1 }
+      { item: "RDS3225 High Torque Servo Motor", qty: 12 },
+      { item: "Raspberry Pi Controller", qty: 1 },
+      { item: "ESP32 Development Board", qty: 1 },
+      { item: "Camera Module", qty: 1 },
+      { item: "Li-ion Battery Pack", qty: 1 },
+      { item: "3D Printed Mechanical Parts", qty: 1 }
     ]
   },
   {
-    id: "robotic-arm",
-    title: "6-Axis Robotic Arm Controller",
-    category: "robotics",
-    description: "A custom Arduino-based driver board and structural components for a high-precision tabletop robotic arm.",
-    details: "Uses NEMA 17 stepper motors and servo drives with custom printed gears and joints. Controlled via USB or Bluetooth gamepad, utilizing inverse kinematics firmware computed on-board.",
-    tech: ["Arduino Mega", "CNC Shield", "A4988 Drivers", "PETG Structural Print", "Bluetooth"],
-    features: ["Inverse kinematics support", "Adjustable microstepping", "3D printed planetary gears", "Bluetooth remote control interface"],
+    id: "electric-cycle",
+    title: "Solar Assisted Smart Electric Cycle with Battery Management System",
+    category: "integrated",
+    description: "A solar-assisted electric bicycle integrating BLDC motor drive, lithium battery management, and renewable energy charging technology for sustainable mobility.",
+    details: "A custom-built smart electric cycle combining BLDC motor propulsion, lithium-ion battery storage, solar charging system, and intelligent Battery Management System (BMS). The solar panel assists battery charging while the BMS provides protection against overcharging, over-discharging, and short circuits, improving battery safety and operational efficiency.",
+    tech: [
+      "BLDC Hub Motor",
+      "Lithium-ion Battery Pack",
+      "Solar Charging System",
+      "BMS Protection Circuit",
+      "Motor Controller",
+      "ESP32/Arduino Monitoring",
+      "Charge Controller"
+    ],
+    features: [
+      "Solar assisted battery charging",
+      "BLDC electric propulsion",
+      "Smart battery protection using BMS",
+      "Energy efficient transportation",
+      "Real-time power monitoring",
+      "Custom mechanical integration"
+    ],
     status: "Completed",
     difficulty: "Advanced",
     images: [
-      "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80"
+      "/images/e-cycle/img_2.jpg",
+      "/images/e-cycle/img_1.jpg",
+      "/images/e-cycle/img_3.jpg",
     ],
     video: "https://assets.mixkit.co/videos/preview/mixkit-hardware-of-a-robot-close-up-4977-large.mp4",
     schematics: "Steppers driven via A4988 drivers connected to digital outputs pins D22-D37 of the Arduino Mega. Microstepping jumpers configured to 1/16 step mode for smooth vibration-free movement. Servos attached to PWM pins D2-D7.",
-    codeSnippet: `#include <AccelStepper.h>
-#include <Servo.h>
+    codeSnippet: `
+// Battery Monitoring Example
 
-// Define 6 Stepper Motors
-AccelStepper axis1(AccelStepper::DRIVER, 22, 23);
-AccelStepper axis2(AccelStepper::DRIVER, 24, 25);
-AccelStepper axis3(AccelStepper::DRIVER, 26, 27);
-AccelStepper axis4(AccelStepper::DRIVER, 28, 29);
-AccelStepper axis5(AccelStepper::DRIVER, 30, 31);
-AccelStepper axis6(AccelStepper::DRIVER, 32, 33);
+#define BATTERY_SENSOR A0
 
-void setup() {
-  Serial.begin(9600);
-  axis1.setMaxSpeed(1000.0);
-  axis1.setAcceleration(500.0);
-  // setup all other motors...
+void setup(){
+ Serial.begin(9600);
 }
 
-void loop() {
-  if (Serial.available()) {
-    // Read kinematics coordinates
-    float x = Serial.parseFloat();
-    float y = Serial.parseFloat();
-    float z = Serial.parseFloat();
-    calculateIK(x, y, z);
-  }
-  axis1.run();
-  // run others...
+void loop(){
+ int voltage = analogRead(BATTERY_SENSOR);
+ Serial.println(voltage);
+
+ delay(1000);
 }`,
     bom: [
-      { item: "Arduino Mega 2560 board", qty: 1 },
-      { item: "RAMPS 1.4 or CNC Shield", qty: 1 },
-      { item: "A4988 Stepper Drivers", qty: 6 },
-      { item: "NEMA 17 Stepper Motors", qty: 5 },
-      { item: "MG996R Metal Gear Servo", qty: 1 },
-      { item: "3D Printed Structural Joints (PETG)", qty: 1 }
+      { item: "BLDC Hub Motor", qty: 1 },
+      { item: "Lithium Ion Battery Pack", qty: 1 },
+      { item: "Battery Management System (BMS)", qty: 1 },
+      { item: "BLDC Motor Controller", qty: 1 },
+      { item: "Throttle Module", qty: 1 },
+      { item: "Cycle Frame & Mechanical Assembly", qty: 1 }
     ]
   },
   {
-    id: "smart-home-hub",
-    title: "Custom Smart Home Gateway",
-    category: "iot",
-    description: "Raspberry Pi-powered Zigbee-to-WiFi gateway with a sleek wall-mountable matte black ABS case.",
-    details: "Runs Home Assistant with custom dashboard to control all home appliances, smart lights, and security cameras locally. Bridges Zigbee sensors with home Wi-Fi network safely and securely.",
-    tech: ["Raspberry Pi 4", "CC2531 Zigbee Dongle", "ABS Filament", "Home Assistant", "Custom PCB"],
-    features: ["Local-first control", "Wall-mount snap design", "Status OLED display", "Secure local backups"],
+    id: "remote-control-skateboard",
+    title: "Remote Controlled Electric Skateboard",
+    category: "robotics",
+    description: "A wireless controlled electric skateboard platform using motor drive electronics and custom mechanical integration.",
+    details: "Developed an electric skateboard system using high torque motors, motor controllers, lithium battery power system, and wireless remote communication. The platform enables smooth acceleration, speed control, and compact personal mobility.",
+    tech: [
+      "BLDC Motor",
+      "Motor ESC",
+      "RF Remote Control",
+      "Lithium Battery",
+      "Embedded Controller",
+      "3D Printed Parts"
+    ],
+    features: [
+      "Wireless speed control",
+      "Electric propulsion system",
+      "Compact mobility design",
+      "Custom battery enclosure",
+      "Variable speed control"
+    ],
     status: "Completed",
     difficulty: "Intermediate",
     images: [
-      "https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80"
+      "/images/eletric-skateboard/img_1.jpg",
+      "/images/eletric-skateboard/img_2.jpg",
+      "/images/eletric-skateboard/img_3.jpg",
+      "/images/eletric-skateboard/img_4.jpg",
     ],
-    video: "https://assets.mixkit.co/videos/preview/mixkit-circuit-board-of-a-computer-close-up-23114-large.mp4",
-    schematics: "OLED display (SSD1306) wired through hardware I2C interface on GPIO 2 (SDA) and GPIO 3 (SCL). Fan controller transistor switch connected to GPIO 14 (PWM) for thermal-controlled case cooling.",
-    codeSnippet: `import time
-import Adafruit_SSD1306
-from PIL import Image, ImageDraw, ImageFont
+    video: "",
+    schematics: "Wireless remote communicates with receiver module which controls motor driver signals. Battery power is regulated through ESC for efficient BLDC motor operation.",
+    codeSnippet: `
+// Motor Speed Control
 
-# Initialize Raspberry Pi GPIO OLED
-disp = Adafruit_SSD1306.SSD1306_128_64(rst=None)
-disp.begin()
-disp.clear()
-disp.display()
+int motorPWM = 9;
 
-# Draw system stats
-width = disp.width
-height = disp.height
-image = Image.new('1', (width, height))
-draw = ImageDraw.Draw(image)
+void setup(){
+ pinMode(motorPWM, OUTPUT);
+}
 
-while True:
-    draw.rectangle((0,0,width,height), outline=0, fill=0)
-    draw.text((0, 0), "THREEDITRON HUB", fill=255)
-    draw.text((0, 16), "IP: 192.168.1.100", fill=255)
-    draw.text((0, 32), "Zigbee: Connected", fill=255)
-    disp.image(image)
-    disp.display()
-    time.sleep(5)`,
+void loop(){
+
+ analogWrite(motorPWM,180);
+
+ delay(100);
+}
+`,
     bom: [
-      { item: "Raspberry Pi 4 Model B (4GB)", qty: 1 },
-      { item: "CC2531 USB Zigbee Sniffer", qty: 1 },
-      { item: "0.96-inch OLED Screen (SSD1306)", qty: 1 },
-      { item: "5V 3A Power Adapter", qty: 1 },
-      { item: "3D Printed ABS Slim Enclosure", qty: 1 }
+      { item: "BLDC Motor", qty: 1 },
+      { item: "Electronic Speed Controller (ESC)", qty: 1 },
+      { item: "Wireless Remote Controller", qty: 1 },
+      { item: "Lithium Battery Pack", qty: 1 },
+      { item: "Motor Mount Assembly", qty: 1 },
+      { item: "Skateboard Deck", qty: 1 }
     ]
   },
   {
