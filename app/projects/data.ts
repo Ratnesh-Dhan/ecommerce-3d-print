@@ -291,60 +291,60 @@ void loop() {
       { item: "3D Printed ABS-FR Case", qty: 1 }
     ]
   },
-  {
-    id: "filament-dryer",
-    title: "Smart Filament Dry-Box Controller",
-    category: "integrated",
-    description: "An automated enclosure heater and dehumidifier to keep 3D printing filament dry during printing.",
-    details: "Measures real-time weight to compute remaining filament, controls a PTC heater block safely, and activates exhaust fan on high humidity levels.",
-    tech: ["Arduino Nano", "Load Cell (HX711)", "PTC Heater", "PETG High-Temp Case", "OLED Screen"],
-    features: ["Automated temperature regulation", "Spool weight estimator", "PTC safe thermal cutoff", "Humidity and Temp sensors"],
-    status: "Completed",
-    difficulty: "Intermediate",
-    images: [
-      "https://images.unsplash.com/photo-1615840287214-7fe58a8b668f?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80"
-    ],
-    video: "https://assets.mixkit.co/videos/preview/mixkit-circuit-board-of-a-computer-close-up-23114-large.mp4",
-    schematics: "PTC 100W heater switched by 10A SPDT relay module on pin D4. HX711 Load Cell amplifier connected to pins D2 (DATA) and D3 (CLK). DHT22 temperature/humidity sensor on pin D5.",
-    codeSnippet: `#include "HX711.h"
-#include <DHT.h>
+  //   {
+  //     id: "filament-dryer",
+  //     title: "Smart Filament Dry-Box Controller",
+  //     category: "integrated",
+  //     description: "An automated enclosure heater and dehumidifier to keep 3D printing filament dry during printing.",
+  //     details: "Measures real-time weight to compute remaining filament, controls a PTC heater block safely, and activates exhaust fan on high humidity levels.",
+  //     tech: ["Arduino Nano", "Load Cell (HX711)", "PTC Heater", "PETG High-Temp Case", "OLED Screen"],
+  //     features: ["Automated temperature regulation", "Spool weight estimator", "PTC safe thermal cutoff", "Humidity and Temp sensors"],
+  //     status: "Completed",
+  //     difficulty: "Intermediate",
+  //     images: [
+  //       "https://images.unsplash.com/photo-1615840287214-7fe58a8b668f?auto=format&fit=crop&w=800&q=80",
+  //       "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80"
+  //     ],
+  //     video: "https://assets.mixkit.co/videos/preview/mixkit-circuit-board-of-a-computer-close-up-23114-large.mp4",
+  //     schematics: "PTC 100W heater switched by 10A SPDT relay module on pin D4. HX711 Load Cell amplifier connected to pins D2 (DATA) and D3 (CLK). DHT22 temperature/humidity sensor on pin D5.",
+  //     codeSnippet: `#include "HX711.h"
+  // #include <DHT.h>
 
-#define DOUT  2
-#define CLK   3
-#define RELAY_PIN 4
+  // #define DOUT  2
+  // #define CLK   3
+  // #define RELAY_PIN 4
 
-HX711 scale;
-DHT dht(5, DHT22);
+  // HX711 scale;
+  // DHT dht(5, DHT22);
 
-void setup() {
-  scale.begin(DOUT, CLK);
-  scale.set_scale(420.0); // Calibration factor
-  scale.tare();
-  dht.begin();
-  pinMode(RELAY_PIN, OUTPUT);
-}
+  // void setup() {
+  //   scale.begin(DOUT, CLK);
+  //   scale.set_scale(420.0); // Calibration factor
+  //   scale.tare();
+  //   dht.begin();
+  //   pinMode(RELAY_PIN, OUTPUT);
+  // }
 
-void loop() {
-  float temp = dht.readTemperature();
-  float hum = dht.readHumidity();
-  float weight = scale.get_units(5); // spool weight
-  
-  if (temp < 45.0 && hum > 25.0) {
-    digitalWrite(RELAY_PIN, HIGH); // Turn heater ON
-  } else if (temp > 50.0 || hum < 15.0) {
-    digitalWrite(RELAY_PIN, LOW);  // Turn heater OFF
-  }
-  delay(2000);
-}`,
-    bom: [
-      { item: "Arduino Nano board", qty: 1 },
-      { item: "HX711 Weighing Sensor Module", qty: 1 },
-      { item: "5kg Load Cell Bar", qty: 1 },
-      { item: "100W 12V PTC Heating Element", qty: 1 },
-      { item: "DHT22 Humidty/Temp sensor", qty: 1 },
-      { item: "12V 10A Relay Module", qty: 1 },
-      { item: "3D Printed Spool rollers and Enclosure (PETG)", qty: 1 }
-    ]
-  }
+  // void loop() {
+  //   float temp = dht.readTemperature();
+  //   float hum = dht.readHumidity();
+  //   float weight = scale.get_units(5); // spool weight
+
+  //   if (temp < 45.0 && hum > 25.0) {
+  //     digitalWrite(RELAY_PIN, HIGH); // Turn heater ON
+  //   } else if (temp > 50.0 || hum < 15.0) {
+  //     digitalWrite(RELAY_PIN, LOW);  // Turn heater OFF
+  //   }
+  //   delay(2000);
+  // }`,
+  //     bom: [
+  //       { item: "Arduino Nano board", qty: 1 },
+  //       { item: "HX711 Weighing Sensor Module", qty: 1 },
+  //       { item: "5kg Load Cell Bar", qty: 1 },
+  //       { item: "100W 12V PTC Heating Element", qty: 1 },
+  //       { item: "DHT22 Humidty/Temp sensor", qty: 1 },
+  //       { item: "12V 10A Relay Module", qty: 1 },
+  //       { item: "3D Printed Spool rollers and Enclosure (PETG)", qty: 1 }
+  //     ]
+  //   }
 ];
