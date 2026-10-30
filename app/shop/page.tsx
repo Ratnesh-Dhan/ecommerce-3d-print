@@ -22,7 +22,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "../context/AuthContext";   // ← added
-import { useRouter } from "next/navigation";       // ← added
+import { useRouter, useSearchParams } from "next/navigation";       // ← added
 
 
 interface Product {
@@ -44,7 +44,11 @@ const productsData: Product[] = [
     price: 349,
     rating: 4.8,
     stock: 25,
-    image: ["Esp32 Devkit Board"],
+    image: ["/images/lithophanes/img-1.jpg",
+      "/images/lithophanes/img-2.jpg",
+      "/images/lithophanes/img-3.jpg",
+
+    ],
     specs: ["Dual-core Tensilica LX6", "Wi-Fi & Bluetooth integrated", "38 GPIO pins"],
   },
   {
@@ -54,7 +58,11 @@ const productsData: Product[] = [
     price: 499,
     rating: 4.7,
     stock: 18,
-    image: ["Arduino Uno R3"],
+    image: ["/images/lithophanes/img-1.jpg",
+      "/images/lithophanes/img-2.jpg",
+      "/images/lithophanes/img-3.jpg",
+
+    ],
     specs: ["ATmega328P MCU", "14 Digital I/O, 6 Analog Input", "5V Operating Voltage"],
   },
   {
@@ -64,7 +72,11 @@ const productsData: Product[] = [
     price: 180,
     rating: 4.6,
     stock: 40,
-    image: ["DHT22 Sensor Module"],
+    image: ["/images/lithophanes/img-1.jpg",
+      "/images/lithophanes/img-2.jpg",
+      "/images/lithophanes/img-3.jpg",
+
+    ],
     specs: ["High precision capacitive sensor", "3.3V to 6V input", "0-100% Humidity range"],
   },
   {
@@ -74,7 +86,11 @@ const productsData: Product[] = [
     price: 749,
     rating: 4.9,
     stock: 12,
-    image: ["NEMA 17 Motor"],
+    image: ["/images/lithophanes/img-1.jpg",
+      "/images/lithophanes/img-2.jpg",
+      "/images/lithophanes/img-3.jpg",
+
+    ],
     specs: ["1.8 deg Step Angle", "1.5A rated current", "4-lead wire connection"],
   },
   {
@@ -84,7 +100,11 @@ const productsData: Product[] = [
     price: 35,
     rating: 4.5,
     stock: 120,
-    image: ["TP4056 Charger"],
+    image: ["/images/lithophanes/img-1.jpg",
+      "/images/lithophanes/img-2.jpg",
+      "/images/lithophanes/img-3.jpg",
+
+    ],
     specs: ["1A Linear Charging Current", "With protection circuit", "Status LEDs indication"],
   },
   {
@@ -94,7 +114,11 @@ const productsData: Product[] = [
     price: 1299,
     rating: 4.9,
     stock: 15,
-    image: ["Premium PLA+ Yellow",],
+    image: ["/images/lithophanes/img-1.jpg",
+      "/images/lithophanes/img-2.jpg",
+      "/images/lithophanes/img-3.jpg",
+
+    ],
     specs: ["1.75mm diameter, ±0.02mm tolerance", "190°C - 220°C print temp", "High layer adhesion"],
   },
   {
@@ -104,7 +128,11 @@ const productsData: Product[] = [
     price: 99,
     rating: 4.4,
     stock: 65,
-    image: ["SG90 9g Servo"],
+    image: ["/images/lithophanes/img-1.jpg",
+      "/images/lithophanes/img-2.jpg",
+      "/images/lithophanes/img-3.jpg",
+
+    ],
     specs: ["1.6kg/cm stall torque", "180 degree rotation speed", "Lightweight nylon gears"],
   },
   {
@@ -114,7 +142,11 @@ const productsData: Product[] = [
     price: 85,
     rating: 4.6,
     stock: 55,
-    image: ["HC-SR04 Sensor"],
+    image: ["/images/lithophanes/img-1.jpg",
+      "/images/lithophanes/img-2.jpg",
+      "/images/lithophanes/img-3.jpg",
+
+    ],
     specs: ["2cm to 400cm range", "40kHz frequency", "5V operating voltage"],
   },
   {
@@ -138,7 +170,11 @@ const productsData: Product[] = [
     price: 1199,
     rating: 4.8,
     stock: 15,
-    image: ["Personalized Lithophane Photo Frames"],
+    image: ["/images/lithophanes/img-1.jpg",
+      "/images/lithophanes/img-2.jpg",
+      "/images/lithophanes/img-3.jpg",
+
+    ],
     specs: ["High resolution", "LED backlight", "Custom size"]
   },
   {
@@ -148,7 +184,11 @@ const productsData: Product[] = [
     price: 899,
     rating: 4.7,
     stock: 30,
-    image: ["Spiral Vases"],
+    image: ["/images/lithophanes/img-1.jpg",
+      "/images/lithophanes/img-2.jpg",
+      "/images/lithophanes/img-3.jpg",
+
+    ],
     specs: ["Elegant design", "Durable PETG", "Various heights"]
   },
   {
@@ -158,7 +198,11 @@ const productsData: Product[] = [
     price: 1099,
     rating: 4.8,
     stock: 25,
-    image: ["Modern Planters"],
+    image: ["/images/lithophanes/img-1.jpg",
+      "/images/lithophanes/img-2.jpg",
+      "/images/lithophanes/img-3.jpg",
+
+    ],
     specs: ["Self-watering", "Eco-friendly PLA", "Various sizes"]
   },
   {
@@ -168,7 +212,11 @@ const productsData: Product[] = [
     price: 699,
     rating: 4.9,
     stock: 40,
-    image: ["Personalized Nameplates"],
+    image: ["/images/lithophanes/img-1.jpg",
+      "/images/lithophanes/img-2.jpg",
+      "/images/lithophanes/img-3.jpg",
+
+    ],
     specs: ["Laser engraved", "Custom text", "Premium material"]
   },
   {
@@ -178,7 +226,11 @@ const productsData: Product[] = [
     price: 299,
     rating: 4.6,
     stock: 60,
-    image: ["Custom Keychains"],
+    image: ["/images/lithophanes/img-1.jpg",
+      "/images/lithophanes/img-2.jpg",
+      "/images/lithophanes/img-3.jpg",
+
+    ],
     specs: ["Metallic finish", "Personalized engraving", "Durable"]
   },
   {
@@ -188,7 +240,11 @@ const productsData: Product[] = [
     price: 499,
     rating: 4.7,
     stock: 35,
-    image: ["Mobile Phone Stands"],
+    image: ["/images/lithophanes/img-1.jpg",
+      "/images/lithophanes/img-2.jpg",
+      "/images/lithophanes/img-3.jpg",
+
+    ],
     specs: ["Adjustable angle", "Non-slip base", "Compact"]
   },
   {
@@ -198,7 +254,11 @@ const productsData: Product[] = [
     price: 799,
     rating: 4.8,
     stock: 22,
-    image: ["Desk Organizers"],
+    image: ["/images/lithophanes/img-1.jpg",
+      "/images/lithophanes/img-2.jpg",
+      "/images/lithophanes/img-3.jpg",
+
+    ],
     specs: ["Multiple compartments", "Modern design", "Sturdy"]
   },
   {
@@ -208,7 +268,11 @@ const productsData: Product[] = [
     price: 199,
     rating: 4.5,
     stock: 50,
-    image: ["Cable Organizers"],
+    image: ["/images/lithophanes/img-1.jpg",
+      "/images/lithophanes/img-2.jpg",
+      "/images/lithophanes/img-3.jpg",
+
+    ],
     specs: ["Flexible", "Reusable", "Easy clip"]
   },
   {
@@ -218,7 +282,11 @@ const productsData: Product[] = [
     price: 599,
     rating: 4.7,
     stock: 28,
-    image: ["Headphone Stands"],
+    image: ["/images/lithophanes/img-1.jpg",
+      "/images/lithophanes/img-2.jpg",
+      "/images/lithophanes/img-3.jpg",
+
+    ],
     specs: ["Aluminum frame", "Cable management", "Stable base"]
   },
   {
@@ -228,7 +296,11 @@ const productsData: Product[] = [
     price: 649,
     rating: 4.6,
     stock: 18,
-    image: ["Controller Stands"],
+    image: ["/images/lithophanes/img-1.jpg",
+      "/images/lithophanes/img-2.jpg",
+      "/images/lithophanes/img-3.jpg",
+
+    ],
     specs: ["Fit for PS, Xbox", "High quality", "Non-slip"]
   },
   {
@@ -238,7 +310,11 @@ const productsData: Product[] = [
     price: 1599,
     rating: 4.9,
     stock: 10,
-    image: ["Articulated Dragons"],
+    image: ["/images/lithophanes/img-1.jpg",
+      "/images/lithophanes/img-2.jpg",
+      "/images/lithophanes/img-3.jpg",
+
+    ],
     specs: ["Fully poseable", "High detail", "Premium resin"]
   },
   {
@@ -248,7 +324,11 @@ const productsData: Product[] = [
     price: 1499,
     rating: 4.8,
     stock: 12,
-    image: ["Articulated Octopus"],
+    image: ["/images/lithophanes/img-1.jpg",
+      "/images/lithophanes/img-2.jpg",
+      "/images/lithophanes/img-3.jpg",
+
+    ],
     specs: ["Multiple limbs", "Flexible joints", "Resin"]
   },
   {
@@ -258,7 +338,11 @@ const productsData: Product[] = [
     price: 1299,
     rating: 4.7,
     stock: 25,
-    image: ["Raspberry Pi & Arduino Cases"],
+    image: ["/images/lithophanes/img-1.jpg",
+      "/images/lithophanes/img-2.jpg",
+      "/images/lithophanes/img-3.jpg",
+
+    ],
     specs: ["Custom fit", "Ventilation", "Durable"]
   },
 ];
@@ -272,7 +356,6 @@ const getProductImage = (product: Product) =>
   product.image.find((image) => image.startsWith("/"));
 
 export default function ShopPage() {
-  const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -289,6 +372,19 @@ export default function ShopPage() {
 
   const { isAuthenticated } = useAuth();   // ← use auth state
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const searchTerm = searchParams.get("search") ?? "";
+
+  const setSearchTerm = (term: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (term) {
+      params.set("search", term);
+    } else {
+      params.delete("search");
+    }
+    const query = params.toString();
+    router.replace(query ? `/shop?${query}` : "/shop", { scroll: false });
+  };
 
   const handleAddToCart = (product: Product) => {
     setCart((prev) => {

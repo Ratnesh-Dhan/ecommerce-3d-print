@@ -78,8 +78,8 @@ const Hero = () => {
         </div>
 
         {/* RIGHT 3D MODEL */}
-        <div className="h-[280px] sm:h-[360px] lg:h-[400px]">
-          <Canvas camera={{ position: [0, 0, 80] }}>
+        <div className="h-[250px] sm:h-[250px] lg:h-[250px]">
+          <Canvas camera={{ position: [0, 0, 110], fov: 48 }}>
             <ambientLight intensity={1} />
             <directionalLight position={[50, 50, 50]} />
 

@@ -26,6 +26,16 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+@keyframes product-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 .glass {
   background: rgba(255, 200, 200, 0.2);
   border-radius: 16px;
