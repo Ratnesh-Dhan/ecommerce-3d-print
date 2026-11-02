@@ -44,7 +44,7 @@ const productsData: Product[] = [
     price: 349,
     rating: 4.8,
     stock: 25,
-    image: ["/images/lithophanes/img-1.jpg",
+    image: ["/images/eletronics/esp32.jpg",
       "/images/lithophanes/img-2.jpg",
       "/images/lithophanes/img-3.jpg",
 
@@ -58,7 +58,7 @@ const productsData: Product[] = [
     price: 499,
     rating: 4.7,
     stock: 18,
-    image: ["/images/lithophanes/img-1.jpg",
+    image: ["/images/eletronics/arduino_uno.jpg",
       "/images/lithophanes/img-2.jpg",
       "/images/lithophanes/img-3.jpg",
 
@@ -72,7 +72,7 @@ const productsData: Product[] = [
     price: 180,
     rating: 4.6,
     stock: 40,
-    image: ["/images/lithophanes/img-1.jpg",
+    image: ["/images/eletronics/dht22.jpg",
       "/images/lithophanes/img-2.jpg",
       "/images/lithophanes/img-3.jpg",
 
@@ -86,7 +86,7 @@ const productsData: Product[] = [
     price: 749,
     rating: 4.9,
     stock: 12,
-    image: ["/images/lithophanes/img-1.jpg",
+    image: ["/images/eletronics/nema_17.jpg",
       "/images/lithophanes/img-2.jpg",
       "/images/lithophanes/img-3.jpg",
 
@@ -100,7 +100,7 @@ const productsData: Product[] = [
     price: 35,
     rating: 4.5,
     stock: 120,
-    image: ["/images/lithophanes/img-1.jpg",
+    image: ["/images/eletronics/tp4056.jpg",
       "/images/lithophanes/img-2.jpg",
       "/images/lithophanes/img-3.jpg",
 
@@ -114,7 +114,7 @@ const productsData: Product[] = [
     price: 1299,
     rating: 4.9,
     stock: 15,
-    image: ["/images/lithophanes/img-1.jpg",
+    image: ["/images/eletronics/pla.jpg",
       "/images/lithophanes/img-2.jpg",
       "/images/lithophanes/img-3.jpg",
 
@@ -128,7 +128,7 @@ const productsData: Product[] = [
     price: 99,
     rating: 4.4,
     stock: 65,
-    image: ["/images/lithophanes/img-1.jpg",
+    image: ["/images/eletronics/sg90.jpg",
       "/images/lithophanes/img-2.jpg",
       "/images/lithophanes/img-3.jpg",
 
@@ -142,7 +142,7 @@ const productsData: Product[] = [
     price: 85,
     rating: 4.6,
     stock: 55,
-    image: ["/images/lithophanes/img-1.jpg",
+    image: ["/images/eletronics/hc_sr04.jpg",
       "/images/lithophanes/img-2.jpg",
       "/images/lithophanes/img-3.jpg",
 
@@ -156,7 +156,7 @@ const productsData: Product[] = [
     price: 1499,
     rating: 4.9,
     stock: 20,
-    image: ["/images/lithophanes/img-1.jpg",
+    image: ["/images/lithophanes/img-4.jpg",
       "/images/lithophanes/img-2.jpg",
       "/images/lithophanes/img-3.jpg",
 

@@ -2,6 +2,7 @@
 
 import { useAuth } from "@/app/context/AuthContext";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 
 interface CartItem {
@@ -38,7 +39,7 @@ export default function Checkout() {
 
     const handlePay = async () => {
         if (cartTotal <= 0) {
-            alert("Your cart is empty. Please add items before checking out.");
+            toast.error("Your cart is empty. Please add items before checking out.");
             router.push("/shop");
             return;
         }
@@ -54,7 +55,7 @@ export default function Checkout() {
 
         const data = await res.json();
         if (!data.orderId) {
-            alert("Failed to create payment order");
+            toast.error("Failed to create payment order");
             return;
         }
 
@@ -83,10 +84,25 @@ export default function Checkout() {
                   // Clear cart data after successful payment
                   localStorage.removeItem('cartTotal');
                   localStorage.removeItem('cartItems');
-                  alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
+                  // Send order confirmation email
+                  try {
+                    await fetch('/api/order/complete', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        email: userEmail,
+                        paymentId: response.razorpay_payment_id,
+                        amount: amountInPaise / 100,
+                      }),
+                    });
+                    toast.success('Order email sent! 🎉');
+                  } catch (e) {
+                    toast.error('Failed to send order email');
+                  }
+                  toast.success('Payment successful! 🎉');
                   router.push('/checkout/success');
                 } else {
-                  alert('Payment verification failed.');
+                  toast.error('Payment verification failed.');
                   router.push('/checkout/cancel');
                 }
             },

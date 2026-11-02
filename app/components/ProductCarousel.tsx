@@ -28,7 +28,7 @@ function ProductCard({ product, duplicate = false }: { product: Product; duplica
     <>
       <div className="relative flex h-36 items-center justify-center overflow-hidden border-b border-yellow-500/10 bg-zinc-900 sm:h-40">
         {image ? (
-          <Image src={image} alt={product.name} fill sizes="250px" className="object-cover transition duration-500 group-hover:scale-110" />
+          <Image src={image} alt={product.name} fill sizes="250px" className="object-contain transition duration-500 group-hover:scale-110" />
         ) : (
           <>
             <div className="absolute h-28 w-28 rounded-full bg-yellow-500/10 blur-2xl" />

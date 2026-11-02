@@ -2,15 +2,17 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 export default function CheckoutSuccess() {
     const router = useRouter();
 
     // OPTIONAL: auto‑redirect after a few seconds
     useEffect(() => {
-        const timer = setTimeout(() => router.push("/"), 5000);
-        return () => clearTimeout(timer);
-    }, [router]);
+  toast.success('Purchase confirmed! 🎉');
+  const timer = setTimeout(() => router.push("/"), 5000);
+  return () => clearTimeout(timer);
+}, [router]);
 
     return (
         <section className="flex min-h-screen items-center justify-center bg-black/80">

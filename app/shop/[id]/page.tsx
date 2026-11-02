@@ -68,7 +68,7 @@ export default function ProductDetailPage({ params }: PageProps) {
                     className={`relative h-20 w-24 shrink-0 overflow-hidden rounded-xl border-2 transition ${selectedImageIndex === index ? "border-yellow-500" : "border-transparent opacity-60 hover:opacity-100"}`}
                     aria-label={`Show image ${index + 1}`}
                   >
-                    <Image src={image} alt="" fill sizes="96px" className="object-cover" />
+                    <Image src={image} alt="" fill sizes="96px" className="object-contain" />
                   </button>
                 ))}
               </div>
