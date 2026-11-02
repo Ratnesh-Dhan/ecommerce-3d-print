@@ -3,8 +3,6 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { useEffect } from "react";
-import axios from "axios";
-import SplitFlapText from "../component/SplitFlapText";
 
 function DemoModel() {
   return (
@@ -14,6 +12,8 @@ function DemoModel() {
     </mesh>
   );
 }
+import axios from "axios";
+import SplitFlapText from "../component/SplitFlapText";
 
 const Hero = () => {
   useEffect(() => {
