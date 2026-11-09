@@ -8,16 +8,18 @@ import { Menu, Search, X } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function Header() {
+export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
-  const { isAuthenticated, authChecked, logout, userEmail, username } = useAuth(); // added userEmail & username
-  const displayName = username ?? (userEmail?.split("@")[0] ?? "Guest");
+  const { isAuthenticated, authChecked, logout, userEmail, username } =
+    useAuth(); // added userEmail & username
+  const displayName = username ?? userEmail?.split("@")[0] ?? "Guest";
   const links = [
     { href: "/", label: "Home" },
     { href: "/Stl", label: "STL Calculator" },
     { href: "/Services", label: "Services" },
+    { href: "/Shop", label: "Shop" },
     { href: "/projects", label: "Projects" },
     { href: "/Contact_Us", label: "Contact" },
   ];
@@ -25,7 +27,7 @@ export default function Header() {
   const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const query = searchQuery.trim();
-    router.push(query ? `/shop?search=${encodeURIComponent(query)}` : "/shop");
+    router.push(query ? `/Shop?search=${encodeURIComponent(query)}` : "/Shop");
     setIsMenuOpen(false);
   };
 
@@ -36,7 +38,6 @@ export default function Header() {
         {/* <h1 className="text-xl font-bold text-yellow-500">
           Kamal 3D
         </h1> */}
-
 
         <Link href="/" className="shrink-0 text-xl font-bold text-yellow-500 ">
           <Image
@@ -50,15 +51,27 @@ export default function Header() {
 
         <nav className="hidden xl:flex items-center text-base lg:text-lg">
           {links.map((link) => (
-            <Link key={link.href} href={link.href} className="hover:text-yellow-500 transition hover:border border-[#FFEB3B] rounded-lg px-3 py-2">
+            <Link
+              key={link.href}
+              href={link.href}
+              className="hover:text-yellow-500 transition hover:border border-[#FFEB3B] rounded-lg px-3 py-2"
+            >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <form onSubmit={handleSearch} className="hidden xl:block relative w-44 2xl:w-56">
-          <label htmlFor="site-search" className="sr-only">Search products</label>
-          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
+        <form
+          onSubmit={handleSearch}
+          className="hidden xl:block relative w-44 2xl:w-56"
+        >
+          <label htmlFor="site-search" className="sr-only">
+            Search products
+          </label>
+          <Search
+            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+            size={16}
+          />
           <input
             id="site-search"
             type="search"
@@ -69,9 +82,17 @@ export default function Header() {
           />
         </form>
 
-        <form onSubmit={handleSearch} className="relative min-w-0 flex-1 xl:hidden">
-          <label htmlFor="mobile-header-search" className="sr-only">Search products</label>
-          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
+        <form
+          onSubmit={handleSearch}
+          className="relative min-w-0 flex-1 xl:hidden"
+        >
+          <label htmlFor="mobile-header-search" className="sr-only">
+            Search products
+          </label>
+          <Search
+            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+            size={16}
+          />
           <input
             id="mobile-header-search"
             type="search"
@@ -84,7 +105,9 @@ export default function Header() {
 
         <button
           type="button"
-          aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-label={
+            isMenuOpen ? "Close navigation menu" : "Open navigation menu"
+          }
           aria-expanded={isMenuOpen}
           onClick={() => setIsMenuOpen((open) => !open)}
           className="xl:hidden p-2 text-yellow-500 hover:bg-yellow-500/10 rounded-lg"
@@ -126,12 +149,19 @@ export default function Header() {
       {isMenuOpen && (
         <nav className="xl:hidden border-t border-yellow-500/20 px-2 py-3 flex flex-col items-stretch gap-1">
           {links.map((link) => (
-            <Link key={link.href} href={link.href} onClick={() => setIsMenuOpen(false)} className="rounded-lg px-3 py-2.5 text-base hover:bg-yellow-500 hover:text-black transition">
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setIsMenuOpen(false)}
+              className="rounded-lg px-3 py-2.5 text-base hover:bg-yellow-500 hover:text-black transition"
+            >
               {link.label}
             </Link>
           ))}
           {!authChecked ? (
-            <span className="px-3 py-2.5 text-sm text-gray-500">Loading account…</span>
+            <span className="px-3 py-2.5 text-sm text-gray-500">
+              Loading account…
+            </span>
           ) : isAuthenticated ? (
             <div className="mt-2 flex items-center justify-between border-t border-yellow-500/20 px-3 pt-3">
               <span className="font-medium text-yellow-500">{displayName}</span>

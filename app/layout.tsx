@@ -1,7 +1,7 @@
 import "./globals.css";
 import { AuthProvider } from "./context/AuthContext";
 import { Toaster } from "react-hot-toast";
-import Header from "./components/header";
+import Navbar from "./components/navbar";
 import Footer from "./components/footer";
 import Socials from "./components/Socials/page";
 
@@ -11,7 +11,6 @@ import Socials from "./components/Socials/page";
 // };
 
 import Script from "next/script";
-
 
 export const metadata = {
   title: {
@@ -95,7 +94,6 @@ export default function RootLayout({
     <AuthProvider>
       <html lang="en">
         <head>
-
           {/* return (
           <html lang="en">
             <head> */}
@@ -130,7 +128,7 @@ export default function RootLayout({
           />
         </head>
         <body className="antialiased bg-white">
-          <Header />
+          <Navbar />
           <Toaster
             position="top-center"
             toastOptions={{
@@ -151,6 +149,5 @@ export default function RootLayout({
         </body>
       </html>
     </AuthProvider>
-
   );
 }
