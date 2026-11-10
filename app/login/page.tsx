@@ -6,20 +6,43 @@ import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 
 export default function LoginPage() {
-  const { login } = useAuth();               // login now needs email & password
+  const { setUser } = useAuth(); // login now needs email & password
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string>("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
       setError("Please fill in both email and password.");
       return;
     }
-    // ✅ Pass both arguments to the updated login function
-    login(email, password);
+    console.log(email, password);
+    const response = await fetch("/api/auth/loginAPI", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      alert(data.message);
+      return;
+    }
+    console.log("data : ", data.data);
+    setUser(data.data.user);
+    if (data.data.user.role === "admin") {
+      window.location.href = "/admin";
+    } else {
+      window.location.href = "/";
+    }
   };
 
   return (
@@ -31,7 +54,7 @@ export default function LoginPage() {
         {error && (
           <p className="mb-4 text-center text-red-400 text-sm">{error}</p>
         )}
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleLogin} className="space-y-5">
           {/* Email */}
           <div>
             <label className="block text-xs text-gray-400 font-semibold mb-1">

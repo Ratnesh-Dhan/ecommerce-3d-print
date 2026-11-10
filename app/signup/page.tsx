@@ -7,18 +7,17 @@ import { Eye, EyeOff } from "lucide-react";
 
 export default function SignUpPage() {
   // register now accepts (email, password, username?)
-  const { register } = useAuth();
+  const { setUser } = useAuth();
 
-  const [username, setUsername] = useState("");   // ← new state
+  const [username, setUsername] = useState(""); // ← new state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPwd, setConfirmPwd] = useState("");
   const [showPwd, setShowPwd] = useState(false);
   const [error, setError] = useState<string>("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-
     // basic validation
     if (!username || !email || !password || !confirmPwd) {
       setError("All fields are required.");
@@ -28,9 +27,22 @@ export default function SignUpPage() {
       setError("Passwords do not match.");
       return;
     }
-
-    // Pass username as the third argument (optional)
-    register(email, password, username);
+    const response = await fetch("/api/auth/registerAPI", {
+      method: "POST",
+      body: JSON.stringify({
+        name: username,
+        email: email,
+        password: password,
+      }),
+    });
+    const data = await response.json();
+    console.log(data);
+    setUser(data.data.user);
+    if (data.data.user.role === "admin") {
+      window.location.href = "/admin";
+    } else {
+      window.location.href = "/";
+    }
   };
 
   return (
@@ -40,7 +52,7 @@ export default function SignUpPage() {
           Sign Up
         </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleRegister} className="space-y-5">
           {/* Username */}
           <div>
             <label className="block text-xs text-gray-400 font-semibold mb-1">
