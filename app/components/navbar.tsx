@@ -12,9 +12,8 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
-  const { isAuthenticated, authChecked, logout, userEmail, username } =
-    useAuth(); // added userEmail & username
-  const displayName = username ?? userEmail?.split("@")[0] ?? "Guest";
+  const { isAuthenticated, authChecked, logout, user } = useAuth(); // added userEmail & username
+  const displayName = user?.name;
   const links = [
     { href: "/", label: "Home" },
     { href: "/Stl", label: "STL Calculator" },

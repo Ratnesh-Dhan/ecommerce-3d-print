@@ -69,19 +69,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = async () => {
     try {
-      // This endpoint must clear the accessToken cookie on the backend.
       const response = await fetch("/api/auth/logoutAPI", {
         method: "POST",
         credentials: "include",
       });
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error("Logout failed");
+        // throw new Error("Logout failed");
+        console.log("test");
       }
-
-      setUserState(null);
-      toast.success("Logged out successfully!");
-      router.push("/login");
+      if (data.success) {
+        setUserState(null);
+        toast.success(data.message);
+        router.push("/login");
+      } else {
+        toast.error(data.message);
+        console.log(data.message);
+      }
     } catch (error) {
       console.error("Logout error:", error);
       toast.error("Unable to log out.");

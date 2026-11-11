@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const { setUser } = useAuth(); // login now needs email & password
@@ -11,37 +12,45 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string>("");
+  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) {
-      setError("Please fill in both email and password.");
-      return;
-    }
-    console.log(email, password);
-    const response = await fetch("/api/auth/loginAPI", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
+    console.log("Handle login clicked");
+    try {
+      if (!email || !password) {
+        setError("Please fill in both email and password.");
+        return;
+      }
+      console.log(email, password);
+      const response = await fetch("/api/auth/loginAPI", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
 
-    const data = await response.json();
-    if (!response.ok) {
-      alert(data.message);
-      return;
-    }
-    console.log("data : ", data.data);
-    setUser(data.data.user);
-    if (data.data.user.role === "admin") {
-      window.location.href = "/admin";
-    } else {
-      window.location.href = "/";
+      const data = await response.json();
+      if (!response.ok) {
+        alert(data.message);
+        return;
+      }
+      console.log("Logged in successfully");
+      console.log("data : ", data.data);
+      setUser(data.data.user);
+      if (data.data.user.role === "admin") {
+        router.push("/admin");
+      } else {
+        router.push("/");
+      }
+    } catch (error) {
+      console.log("Login failed on Client side");
+      console.error(error);
     }
   };
 

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
   // register now accepts (email, password, username?)
@@ -15,6 +16,7 @@ export default function SignUpPage() {
   const [confirmPwd, setConfirmPwd] = useState("");
   const [showPwd, setShowPwd] = useState(false);
   const [error, setError] = useState<string>("");
+  const router = useRouter();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,11 +39,11 @@ export default function SignUpPage() {
     });
     const data = await response.json();
     console.log(data);
-    setUser(data.data.user);
-    if (data.data.user.role === "admin") {
-      window.location.href = "/admin";
+    setUser(data.user);
+    if (data.user.role === "admin") {
+      router.push("/admin");
     } else {
-      window.location.href = "/";
+      router.push("/");
     }
   };
 

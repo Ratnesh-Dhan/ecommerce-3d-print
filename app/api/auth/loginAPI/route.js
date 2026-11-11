@@ -33,8 +33,22 @@ export async function POST(req) {
         { status: response.status },
       );
     }
+    // test
+    console.log("Backend status:", response.status);
+    const cookies = response.headers.getSetCookie();
+
+    console.log("Backend Set-Cookie count:", cookies.length);
+    console.log(
+      "Backend cookie names:",
+      cookies.map((c) => c.split("=")[0]),
+    );
+    // test
     const data = await response.json();
-    return NextResponse.json({ data }, { status: 200 });
+    const nextResponse = NextResponse.json({ data }, { status: 200 });
+    for (const cookie of cookies) {
+      nextResponse.headers.append("Set-Cookie", cookie);
+    }
+    return nextResponse;
   } catch (error) {
     return NextResponse.json(
       {
