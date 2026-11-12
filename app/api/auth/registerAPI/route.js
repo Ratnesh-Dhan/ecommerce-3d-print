@@ -31,11 +31,13 @@ export async function POST(req) {
       );
     }
     const data = await response.json();
+    console.log({ data });
     const cookies = response.headers.getSetCookie();
     const nextResponse = NextResponse.json({ data }, { status: 200 });
     for (const cookie of cookies) {
       nextResponse.headers.append("Set-Cookie", cookie);
     }
+    return nextResponse;
   } catch (error) {
     return NextResponse.json(
       { message: error instanceof Error ? error.message : error.toString() },

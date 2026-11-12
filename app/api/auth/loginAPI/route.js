@@ -44,6 +44,7 @@ export async function POST(req) {
     );
     // test
     const data = await response.json();
+    console.log({ data });
     const nextResponse = NextResponse.json({ data }, { status: 200 });
     for (const cookie of cookies) {
       nextResponse.headers.append("Set-Cookie", cookie);
