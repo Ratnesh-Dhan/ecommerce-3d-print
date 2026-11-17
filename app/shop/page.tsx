@@ -416,7 +416,7 @@ export default function ShopPage() {
       params.delete("search");
     }
     const query = params.toString();
-    router.replace(query ? `/shop?${query}` : "/shop", { scroll: false });
+    router.replace(query ? `/Shop?${query}` : "/Shop", { scroll: false });
   };
 
   const handleAddToCart = (product: Product) => {
@@ -661,7 +661,7 @@ export default function ShopPage() {
                         <span>Add to Cart</span>
                       </button>
                       <Link
-                        href={`/shop/${product.id}`}
+                        href={`/Shop/${product.id}`}
                         className="mt-3 flex items-center justify-center gap-1.5 text-xs font-bold text-yellow-500 transition hover:text-yellow-400"
                       >
                         View product details

@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://threeditron.com";
-  
+
   return [
     {
       url: baseUrl,
@@ -35,7 +35,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/shop`,
+      url: `${baseUrl}/Shop`,
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 0.9,
