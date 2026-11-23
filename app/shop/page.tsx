@@ -7,7 +7,7 @@
 // app/shop/page.tsx – top of file
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ShoppingCart,
   Search,
@@ -46,7 +46,7 @@ const productsData: Product[] = [
     id: "lithophane-lamps",
     name: "Lithophane Lamps",
     category: "designs",
-    price: 1499,
+    price: 1299,
     rating: 4.9,
     stock: 20,
     image: [
@@ -60,7 +60,7 @@ const productsData: Product[] = [
     id: "personalized-lithophane-frames",
     name: "Personalized Lithophane Photo Frames",
     category: "designs",
-    price: 1199,
+    price: 1099,
     rating: 4.8,
     stock: 15,
     image: [
@@ -74,7 +74,7 @@ const productsData: Product[] = [
     id: "spiral-vases",
     name: "Spiral Vases",
     category: "designs",
-    price: 899,
+    price: 799,
     rating: 4.7,
     stock: 30,
     image: [
@@ -88,13 +88,14 @@ const productsData: Product[] = [
     id: "esp32-devkit",
     name: "ESP32 NodeMCU Development Board",
     category: "microcontrollers",
-    price: 349,
+    price: 430,
     rating: 4.8,
     stock: 25,
     image: [
-      "/images/eletronics/esp32.jpg",
-      "/images/lithophanes/img-2.jpg",
-      "/images/lithophanes/img-3.jpg",
+      "/images/eletronics/esp32-devkit/esp32.jpg",
+      "/images/eletronics/esp32-devkit/img-1.webp",
+      "/images/eletronics/esp32-devkit/img-2.webp",
+      "/images/eletronics/esp32-devkit/img-3.webp",
     ],
     specs: [
       "Dual-core Tensilica LX6",
@@ -106,7 +107,7 @@ const productsData: Product[] = [
     id: "modern-planters",
     name: "Modern Planters",
     category: "designs",
-    price: 1099,
+    price: 999,
     rating: 4.8,
     stock: 25,
     image: [
@@ -120,7 +121,7 @@ const productsData: Product[] = [
     id: "personalized-nameplates",
     name: "Personalized Nameplates",
     category: "designs",
-    price: 699,
+    price: 399,
     rating: 4.9,
     stock: 40,
     image: [
@@ -218,13 +219,14 @@ const productsData: Product[] = [
     id: "dht22-sensor",
     name: "DHT22 Temperature & Humidity Sensor",
     category: "sensors",
-    price: 180,
+    price: 120,
     rating: 4.6,
     stock: 40,
     image: [
-      "/images/eletronics/dht22.jpg",
-      "/images/lithophanes/img-2.jpg",
-      "/images/lithophanes/img-3.jpg",
+      "/images/eletronics/dht22/dht22.jpg",
+      "/images/eletronics/dht22/img-1.webp",
+      "/images/eletronics/dht22/img-2.webp",
+      "/images/eletronics/dht22/img-3.webp",
     ],
     specs: [
       "High precision capacitive sensor",
@@ -236,7 +238,7 @@ const productsData: Product[] = [
     id: "articulated-dragons",
     name: "Articulated Dragons",
     category: "designs",
-    price: 1599,
+    price: 999,
     rating: 4.9,
     stock: 10,
     image: [
@@ -250,7 +252,7 @@ const productsData: Product[] = [
     id: "articulated-octopus",
     name: "Articulated Octopus",
     category: "designs",
-    price: 1499,
+    price: 799,
     rating: 4.8,
     stock: 12,
     image: [
@@ -264,7 +266,7 @@ const productsData: Product[] = [
     id: "raspberry-pi-arduino-cases",
     name: "Raspberry Pi & Arduino Cases",
     category: "designs",
-    price: 1299,
+    price: 499,
     rating: 4.7,
     stock: 25,
     image: [
@@ -278,7 +280,7 @@ const productsData: Product[] = [
     id: "pla-filament-yellow",
     name: "Premium PLA+ 3D Printer Filament (White, 1kg)",
     category: "filaments",
-    price: 1299,
+    price: 1099,
     rating: 4.9,
     stock: 15,
     image: [
@@ -300,9 +302,10 @@ const productsData: Product[] = [
     rating: 4.7,
     stock: 18,
     image: [
-      "/images/eletronics/arduino_uno.jpg",
-      "/images/lithophanes/img-2.jpg",
-      "/images/lithophanes/img-3.jpg",
+      "/images/eletronics/uno-r3/img-1.webp",
+      "/images/eletronics/uno-r3/img-2.webp",
+      "/images/eletronics/uno-r3/img-3.webp",
+      "/images/eletronics/uno-r3/img-4.webp",
     ],
     specs: [
       "ATmega328P MCU",
@@ -351,7 +354,7 @@ const productsData: Product[] = [
     id: "sg90-servo",
     name: "SG90 Micro Servo Motor 9g",
     category: "motors",
-    price: 99,
+    price: 120,
     rating: 4.4,
     stock: 65,
     image: [
@@ -391,8 +394,20 @@ const getProductImage = (product: Product) =>
 
 export default function ShopPage() {
   const [activeCategory, setActiveCategory] = useState<string>("all");
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { isAuthenticated } = useAuth(); // ← use auth state
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const queuedProduct = productsData.find(
+    (product) => product.id === searchParams.get("addToCart"),
+  );
+  const [cart, setCart] = useState<CartItem[]>(() =>
+    queuedProduct && queuedProduct.stock > 0
+      ? [{ product: queuedProduct, quantity: 1 }]
+      : [],
+  );
+  const [isCartOpen, setIsCartOpen] = useState(
+    () => Boolean(queuedProduct && queuedProduct.stock > 0),
+  );
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [shippingForm, setShippingForm] = useState({
@@ -403,11 +418,16 @@ export default function ShopPage() {
     city: "",
     pincode: "",
   });
-
-  const { isAuthenticated } = useAuth(); // ← use auth state
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const searchTerm = searchParams.get("search") ?? "";
+
+  useEffect(() => {
+    if (!queuedProduct) return;
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("addToCart");
+    const query = params.toString();
+    router.replace(query ? `/Shop?${query}` : "/Shop", { scroll: false });
+  }, [queuedProduct, router, searchParams]);
 
   const setSearchTerm = (term: string) => {
     const params = new URLSearchParams(searchParams.toString());

@@ -3,7 +3,14 @@
 import { use, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Check, Cpu, ShieldAlert, Star } from "lucide-react";
+import {
+  ArrowLeft,
+  Check,
+  Cpu,
+  ShieldAlert,
+  ShoppingCart,
+  Star,
+} from "lucide-react";
 import { productsData } from "../data";
 
 interface PageProps {
@@ -137,10 +144,12 @@ export default function ProductDetailPage({ params }: PageProps) {
             </div>
 
             <Link
-              href="/Shop"
-              className="mt-6 block rounded-xl bg-yellow-500 px-5 py-3 text-center font-bold text-black transition hover:bg-yellow-400"
+              href={`/Shop?addToCart=${encodeURIComponent(product.id)}`}
+              aria-disabled={!isInStock}
+              className={`mt-6 flex items-center justify-center gap-2 rounded-xl px-5 py-3 font-bold transition ${isInStock ? "bg-yellow-500 text-black hover:bg-yellow-400" : "pointer-events-none bg-zinc-800 text-zinc-500"}`}
             >
-              Back to Shop to Add to Cart
+              <ShoppingCart size={18} />
+              {isInStock ? "Add to Cart" : "Out of Stock"}
             </Link>
           </section>
         </div>

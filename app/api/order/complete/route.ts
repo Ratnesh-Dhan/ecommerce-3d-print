@@ -1,9 +1,55 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
+const escapeHtml = (value: unknown) =>
+  String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
 export async function POST(request: Request) {
   try {
-    const { email, paymentId, amount } = await request.json();
+    const { email, paymentId, amount, shippingDetails, items } =
+      await request.json();
+    const deliveryAddress = shippingDetails
+      ? [
+          shippingDetails.address,
+          shippingDetails.city,
+          shippingDetails.state,
+          shippingDetails.pincode,
+        ]
+          .filter(Boolean)
+          .join(", ")
+      : "Not provided";
+    const estimatedDelivery = new Date();
+    estimatedDelivery.setDate(estimatedDelivery.getDate() + 7);
+    const estimatedDeliveryDate = new Intl.DateTimeFormat("en-IN", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(estimatedDelivery);
+    const orderItems = Array.isArray(items) ? items : [];
+    const productSubtotal = orderItems.reduce((total, item) => {
+      const price = Number(item?.product?.price) || 0;
+      const quantity = Number(item?.quantity) || 0;
+      return total + price * quantity;
+    }, 0);
+    const shippingCharge = Math.max((Number(amount) || 0) - productSubtotal, 0);
+    const itemRows = orderItems.length
+      ? orderItems
+          .map((item) => {
+            const price = Number(item?.product?.price) || 0;
+            const quantity = Number(item?.quantity) || 0;
+            return `<tr>
+              <td style="padding:8px 0;border-bottom:1px solid #f1f5f9;">${escapeHtml(item?.product?.name)}</td>
+              <td style="padding:8px 0;border-bottom:1px solid #f1f5f9;text-align:center;">${quantity}</td>
+              <td style="padding:8px 0;border-bottom:1px solid #f1f5f9;text-align:right;">₹${price * quantity}</td>
+            </tr>`;
+          })
+          .join("")
+      : `<tr><td colspan="3" style="padding:8px 0;">Order items unavailable</td></tr>`;
 
     const host = process.env.SMTP_HOST || "smtp.gmail.com";
     const port = Number(process.env.SMTP_PORT || 587);
@@ -36,8 +82,24 @@ export async function POST(request: Request) {
               <div style="background:#fff;border:1px solid #e2e8f0;padding:16px;border-radius:8px;margin:20px 0;">
                 <h3 style="margin-top:0;color:#eab308;border-bottom:1px solid #f1f5f9;padding-bottom:8px;">Order Summary</h3>
                 <table style="width:100%;font-size:13px;line-height:1.8;">
-                  <tr><td style="color:#666;font-weight:bold;">Payment ID:</td><td>${paymentId}</td></tr>
-                  <tr><td style="color:#666;font-weight:bold;">Amount Paid:</td><td>₹${amount}</td></tr>
+                  <tr><td style="color:#666;font-weight:bold;">Payment ID:</td><td>${escapeHtml(paymentId)}</td></tr>
+                  <tr><td style="color:#666;font-weight:bold;">Amount Paid:</td><td>₹${escapeHtml(amount)}</td></tr>
+                  <tr><td style="color:#666;font-weight:bold;">Estimated delivery:</td><td>${estimatedDeliveryDate}</td></tr>
+                  <tr><td style="color:#666;font-weight:bold;">Delivery to:</td><td>${escapeHtml(shippingDetails?.name || "Customer")}</td></tr>
+                  <tr><td style="color:#666;font-weight:bold;">Phone:</td><td>${escapeHtml(shippingDetails?.phone || "Not provided")}</td></tr>
+                  <tr><td style="color:#666;font-weight:bold;vertical-align:top;">Address:</td><td>${escapeHtml(deliveryAddress)}</td></tr>
+                </table>
+              </div>
+              <div style="background:#fff;border:1px solid #e2e8f0;padding:16px;border-radius:8px;margin:20px 0;">
+                <h3 style="margin-top:0;color:#eab308;border-bottom:1px solid #f1f5f9;padding-bottom:8px;">Items Purchased</h3>
+                <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                  <thead><tr style="text-align:left;color:#666;"><th style="padding-bottom:8px;">Product</th><th style="padding-bottom:8px;text-align:center;">Qty</th><th style="padding-bottom:8px;text-align:right;">Price</th></tr></thead>
+                  <tbody>${itemRows}</tbody>
+                  <tfoot>
+                    <tr><td colspan="2" style="padding-top:12px;">Product subtotal</td><td style="padding-top:12px;text-align:right;">₹${productSubtotal}</td></tr>
+                    <tr><td colspan="2" style="padding-top:6px;">Shipping charges</td><td style="padding-top:6px;text-align:right;">${shippingCharge === 0 ? "FREE" : `₹${shippingCharge}`}</td></tr>
+                    <tr><td colspan="2" style="padding-top:12px;font-weight:bold;border-top:1px solid #e2e8f0;">Total paid</td><td style="padding-top:12px;text-align:right;font-weight:bold;border-top:1px solid #e2e8f0;">₹${escapeHtml(amount)}</td></tr>
+                  </tfoot>
                 </table>
               </div>
               <p style="font-size:11px;color:#888;line-height:1.4;">If you have any questions, feel free to reply to this email.</p>

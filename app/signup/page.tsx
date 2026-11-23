@@ -31,18 +31,40 @@ export default function SignUpPage() {
       console.log("Password didnt matched");
       return;
     }
-    const response = await fetch("/api/auth/registerAPI", {
-      method: "POST",
-      body: JSON.stringify({
-        name: username,
-        email: email,
-        password: password.trim(),
-      }),
-    });
-    const data = await response.json();
-    console.log(data.data.user);
-    setUser(data.data.user);
-    router.push("/");
+    try {
+      setError("");
+
+      const response = await fetch("/api/auth/registerAPI", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          name: username,
+          email,
+          password: password.trim(),
+        }),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || "Unable to create your account.");
+        return;
+      }
+
+      const user = data?.data?.user;
+      if (!user) {
+        setError("Account was created, but no user information was returned.");
+        return;
+      }
+
+      setUser(user);
+      router.push("/");
+    } catch (error) {
+      console.error("Registration failed:", error);
+      setError("Unable to create your account. Please try again.");
+    }
   };
   return (
     <section className="flex items-center justify-center min-h-screen bg-black/80">
