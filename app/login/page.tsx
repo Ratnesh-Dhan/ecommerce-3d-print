@@ -44,9 +44,18 @@ export default function LoginPage() {
       console.log("data : ", data.data);
       setUser(data.data.user);
       if (data.data.user.role === "admin") {
-        router.push("/admin");
+        router.push("/admin/products");
       } else {
-        router.push("/");
+        const redirectAfterLogin = localStorage.getItem("redirectAfterLogin");
+        // Only allow an internal path so a saved value cannot redirect off-site.
+        const destination =
+          redirectAfterLogin?.startsWith("/") &&
+          !redirectAfterLogin.startsWith("//")
+            ? redirectAfterLogin
+            : "/";
+
+        localStorage.removeItem("redirectAfterLogin");
+        router.push(destination);
       }
     } catch (error) {
       console.log("Login failed on Client side");

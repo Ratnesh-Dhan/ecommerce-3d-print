@@ -92,10 +92,10 @@ const productsData: Product[] = [
     rating: 4.8,
     stock: 25,
     image: [
-      "/images/eletronics/esp32-devkit/esp32.jpg",
       "/images/eletronics/esp32-devkit/img-1.webp",
       "/images/eletronics/esp32-devkit/img-2.webp",
       "/images/eletronics/esp32-devkit/img-3.webp",
+      "/images/eletronics/esp32-devkit/img-4.webp",
     ],
     specs: [
       "Dual-core Tensilica LX6",
@@ -223,10 +223,10 @@ const productsData: Product[] = [
     rating: 4.6,
     stock: 40,
     image: [
-      "/images/eletronics/dht22/dht22.jpg",
       "/images/eletronics/dht22/img-1.webp",
       "/images/eletronics/dht22/img-2.webp",
       "/images/eletronics/dht22/img-3.webp",
+      "/images/eletronics/dht22/img-4.webp",
     ],
     specs: [
       "High precision capacitive sensor",
@@ -322,9 +322,10 @@ const productsData: Product[] = [
     rating: 4.9,
     stock: 12,
     image: [
-      "/images/eletronics/nema_17.jpg",
-      "/images/lithophanes/img-2.jpg",
-      "/images/lithophanes/img-3.jpg",
+      "/images/eletronics/nema-17/img-1.webp",
+      "/images/eletronics/nema-17/img-2.webp",
+      "/images/eletronics/nema-17/img-3.webp",
+      "/images/eletronics/nema-17/img-4.webp",
     ],
     specs: [
       "1.8 deg Step Angle",
@@ -340,9 +341,10 @@ const productsData: Product[] = [
     rating: 4.5,
     stock: 120,
     image: [
-      "/images/eletronics/tp4056.jpg",
-      "/images/lithophanes/img-2.jpg",
-      "/images/lithophanes/img-3.jpg",
+      "/images/eletronics/tp4056/img-1.webp",
+      "/images/eletronics/tp4056/img-2.webp",
+      "/images/eletronics/tp4056/img-3.webp",
+      "/images/eletronics/tp4056/img-4.webp",
     ],
     specs: [
       "1A Linear Charging Current",
@@ -358,9 +360,10 @@ const productsData: Product[] = [
     rating: 4.4,
     stock: 65,
     image: [
-      "/images/eletronics/sg90.jpg",
-      "/images/lithophanes/img-2.jpg",
-      "/images/lithophanes/img-3.jpg",
+      "/images/eletronics/sg90/img-1.webp",
+      "/images/eletronics/sg90/img-2.webp",
+      "/images/eletronics/sg90/img-3.webp",
+      "/images/eletronics/sg90/img-4.webp",
     ],
     specs: [
       "1.6kg/cm stall torque",
@@ -376,9 +379,10 @@ const productsData: Product[] = [
     rating: 4.6,
     stock: 55,
     image: [
-      "/images/eletronics/hc_sr04.jpg",
-      "/images/lithophanes/img-2.jpg",
-      "/images/lithophanes/img-3.jpg",
+      "/images/eletronics/hc-sr04/img-1.webp",
+      "/images/eletronics/hc-sr04/img-2.webp",
+      "/images/eletronics/hc-sr04/img-3.webp",
+      "/images/eletronics/hc-sr04/img-4.webp",
     ],
     specs: ["2cm to 400cm range", "40kHz frequency", "5V operating voltage"],
   },
@@ -620,7 +624,7 @@ export default function ShopPage() {
                               alt={product.name}
                               fill
                               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                              className="object-cover transition-transform duration-500 group-hover:scale-105"
+                              className="object-cover object-center scale-110 transition-transform duration-500 group-hover:scale-125"
                             />
                           ) : (
                             <Cpu
