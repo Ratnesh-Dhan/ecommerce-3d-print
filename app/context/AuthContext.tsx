@@ -75,17 +75,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       });
       const data = await response.json();
 
-      if (!response.ok) {
-        // throw new Error("Logout failed");
-        console.log("test");
-      }
-      if (data.success) {
+      if (response.ok && data.success) {
         setUserState(null);
-        toast.success(data.message);
+        if (data.backendNotified) toast.success(data.message);
+        else toast(data.message);
         router.push("/login");
+        router.refresh();
       } else {
-        toast.error(data.message);
-        console.log(data.message);
+        toast.error(data.message || "Unable to log out.");
       }
     } catch (error) {
       console.error("Logout error:", error);
