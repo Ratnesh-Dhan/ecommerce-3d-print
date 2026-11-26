@@ -1,43 +1,43 @@
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { NextResponse } from "next/server";
+import { isAdmin } from "@/lib/admin-auth";
 
-// Initialize the B2 S3 Client
+const endpoint = process.env.B2_ENDPOINT?.trim();
+
 const s3 = new S3Client({
-    endpoint: process.env.B2_ENDPOINT,
-    credentials: {
-        accessKeyId: process.env.B2_KEY_ID,
-        secretAccessKey: process.env.B2_APPLICATION_KEY,
-    },
-    region: "us-east-005", // Set to your bucket's actual region prefix
+  endpoint: endpoint && !/^https?:\/\//i.test(endpoint) ? `https://${endpoint}` : endpoint,
+  credentials: {
+    accessKeyId: process.env.B2_KEY_ID,
+    secretAccessKey: process.env.B2_APPLICATION_KEY,
+  },
+  region: "us-east-005",
 });
 
 export async function POST(request) {
-    try {
-        const formData = await request.formData();
-        const file = formData.get("file");
+  if (!(await isAdmin(request.headers.get("cookie")))) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-        if (!file) {
-            return NextResponse.json({ error: "No file provided" }, { status: 400 });
-        }
-
-        // Convert file to an array buffer and then a buffer
-        const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-
-        // Set up upload parameters
-        const uploadParams = {
-            Bucket: process.env.B2_BUCKET_NAME,
-            Key: `${Date.now()}-${file.name}`, // Unique filename
-            Body: buffer,
-            ContentType: file.type,
-        };
-
-        // Send the file to Backblaze B2
-        response = await s3.send(new PutObjectCommand(uploadParams));
-        console.log(response);
-        return NextResponse.json({ success: true, message: "Uploaded successfully" });
-    } catch (error) {
-        console.error("B2 Upload Error:", error);
-        return NextResponse.json({ error: "Upload failed" }, { status: 500 });
+  try {
+    const formData = await request.formData();
+    const file = formData.get("file");
+    if (!(file instanceof File) || !file.type.startsWith("image/")) {
+      return NextResponse.json({ error: "Please select an image file." }, { status: 400 });
     }
+
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
+    const key = `products/${Date.now()}-${safeName}`;
+    await s3.send(new PutObjectCommand({
+      Bucket: process.env.B2_BUCKET_NAME,
+      Key: key,
+      Body: Buffer.from(await file.arrayBuffer()),
+      ContentType: file.type,
+    }));
+
+    const baseUrl = process.env.B2_PUBLIC_URL || `https://f005.backblazeb2.com/file/${process.env.B2_BUCKET_NAME}`;
+    return NextResponse.json({ success: true, key, url: `${baseUrl}/${key}` });
+  } catch (error) {
+    console.error("B2 image upload error:", error);
+    return NextResponse.json({ error: "Image upload failed." }, { status: 500 });
+  }
 }

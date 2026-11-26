@@ -14,6 +14,7 @@ export default function Navbar() {
   const router = useRouter();
   const { isAuthenticated, authChecked, logout, user } = useAuth(); // added userEmail & username
   const displayName = user?.name;
+  const isAdmin = user?.role?.toLowerCase() === "admin";
   const links = [
     { href: "/", label: "Home" },
     { href: "/Stl", label: "STL Calculator" },
@@ -119,6 +120,14 @@ export default function Navbar() {
             <span className="text-gray-500">…</span>
           ) : isAuthenticated ? (
             <>
+              {isAdmin && (
+                <Link
+                  href="/admin/products"
+                  className="rounded-lg border border-yellow-500/60 px-3 py-2 font-semibold text-yellow-500 transition hover:bg-yellow-500 hover:text-black"
+                >
+                  Admin Products
+                </Link>
+              )}
               <span className="text-yellow-500 font-medium">{displayName}</span>
               <button
                 onClick={logout}
@@ -162,18 +171,29 @@ export default function Navbar() {
               Loading account…
             </span>
           ) : isAuthenticated ? (
-            <div className="mt-2 flex items-center justify-between border-t border-yellow-500/20 px-3 pt-3">
-              <span className="font-medium text-yellow-500">{displayName}</span>
-              <button
-                type="button"
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  logout();
-                }}
-                className="rounded-lg px-3 py-2 text-sm text-gray-300 transition hover:bg-yellow-500 hover:text-black"
-              >
-                Log out
-              </button>
+            <div className="mt-2 border-t border-yellow-500/20 px-3 pt-3">
+              {isAdmin && (
+                <Link
+                  href="/admin/products"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="mb-2 block rounded-lg border border-yellow-500/60 px-3 py-2 text-center text-sm font-semibold text-yellow-500 transition hover:bg-yellow-500 hover:text-black"
+                >
+                  Admin Products
+                </Link>
+              )}
+              <div className="flex items-center justify-between">
+                <span className="font-medium text-yellow-500">{displayName}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    logout();
+                  }}
+                  className="rounded-lg px-3 py-2 text-sm text-gray-300 transition hover:bg-yellow-500 hover:text-black"
+                >
+                  Log out
+                </button>
+              </div>
             </div>
           ) : (
             <div className="mt-2 grid grid-cols-2 gap-2 border-t border-yellow-500/20 px-3 pt-3">

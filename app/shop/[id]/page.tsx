@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -11,7 +11,8 @@ import {
   ShoppingCart,
   Star,
 } from "lucide-react";
-import { productsData } from "../data";
+import { productsData, type Product } from "../data";
+import { loadCatalog } from "../catalog";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -19,11 +20,17 @@ interface PageProps {
 
 export default function ProductDetailPage({ params }: PageProps) {
   const { id } = use(params);
-  const product = productsData.find((item) => item.id === id);
+  const [catalogProducts, setCatalogProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    loadCatalog().then(setCatalogProducts).catch(() => console.error("Unable to load published catalog products.")).finally(() => setLoading(false));
+  }, []);
+  const product = catalogProducts.find((item) => item.id === id) ?? productsData.find((item) => item.id === id);
   const productImages =
-    product?.image.filter((image) => image.startsWith("/")) ?? [];
+    product?.image.filter((image) => image?.startsWith("/") || image?.startsWith("https://")) ?? [];
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
+  if (!product && loading) return <div className="min-h-screen bg-black p-6 text-white">Loading product…</div>;
   if (!product) {
     return (
       <div className="min-h-screen bg-black p-6 font-sans text-white flex flex-col items-center justify-center">
@@ -59,7 +66,7 @@ export default function ProductDetailPage({ params }: PageProps) {
           <section className="lg:col-span-7">
             <div className="relative aspect-video overflow-hidden rounded-2xl border border-yellow-500/10 bg-zinc-950">
               {productImages.length > 0 ? (
-                <Image
+                <Image unoptimized
                   src={productImages[selectedImageIndex]}
                   alt={`${product.name} image ${selectedImageIndex + 1}`}
                   fill
@@ -84,7 +91,7 @@ export default function ProductDetailPage({ params }: PageProps) {
                     className={`relative h-20 w-24 shrink-0 overflow-hidden rounded-xl border-2 transition ${selectedImageIndex === index ? "border-yellow-500" : "border-transparent opacity-60 hover:opacity-100"}`}
                     aria-label={`Show image ${index + 1}`}
                   >
-                    <Image
+                    <Image unoptimized
                       src={image}
                       alt=""
                       fill
@@ -105,11 +112,11 @@ export default function ProductDetailPage({ params }: PageProps) {
               {product.name}
             </h1>
 
-            <div className="mt-4 flex items-center gap-2 text-sm text-gray-400">
+            {product.rating > 0 && <div className="mt-4 flex items-center gap-2 text-sm text-gray-400">
               <Star className="fill-yellow-500 text-yellow-500" size={16} />
               <span className="font-bold text-white">{product.rating}</span>
               <span>Product rating</span>
-            </div>
+            </div>}
 
             <div className="my-6 border-y border-zinc-900 py-5">
               <span className="block text-xs text-gray-500">Price</span>

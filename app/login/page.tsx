@@ -43,7 +43,7 @@ export default function LoginPage() {
       console.log("Logged in successfully");
       console.log("data : ", data.data);
       setUser(data.data.user);
-      if (data.data.user.role === "admin") {
+      if (data.data.user.role?.toLowerCase() === "admin") {
         router.push("/admin/products");
       } else {
         const redirectAfterLogin = localStorage.getItem("redirectAfterLogin");

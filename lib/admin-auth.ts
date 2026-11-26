@@ -5,6 +5,15 @@ interface AuthUser {
   role: "user" | "admin";
 }
 
+/**
+ * The auth service is the source of truth for the role, but its value can be
+ * serialized with different casing (for example, `ADMIN`). Keep role checks
+ * consistent everywhere that protects an admin route.
+ */
+export function hasAdminRole(user: AuthUser | null | undefined) {
+  return user?.role?.toLowerCase() === "admin";
+}
+
 export async function getAuthenticatedUser(cookieHeader: string | null) {
   if (!cookieHeader) return null;
 
@@ -27,5 +36,5 @@ export async function getAuthenticatedUser(cookieHeader: string | null) {
 
 export async function isAdmin(cookieHeader: string | null) {
   const user = await getAuthenticatedUser(cookieHeader);
-  return user?.role === "admin";
+  return hasAdminRole(user);
 }

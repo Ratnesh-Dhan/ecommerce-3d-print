@@ -1,5 +1,20 @@
 import { NextResponse } from "next/server";
 
+function makeCookieLocalToThisSite(cookie, requestUrl) {
+  const isHttps = new URL(requestUrl).protocol === "https:";
+  let result = cookie.replace(/;\s*Domain=[^;]*/gi, "");
+
+  // A Secure cookie cannot be sent by http://localhost during development.
+  // Keep it Secure in production, where the request is HTTPS.
+  if (!isHttps) {
+    result = result
+      .replace(/;\s*Secure/gi, "")
+      .replace(/;\s*SameSite=None/gi, "; SameSite=Lax");
+  }
+
+  return result;
+}
+
 export async function POST(req) {
   try {
     const { email, password } = await req.json();
@@ -33,21 +48,14 @@ export async function POST(req) {
         { status: response.status },
       );
     }
-    // test
-    console.log("Backend status:", response.status);
     const cookies = response.headers.getSetCookie();
-
-    console.log("Backend Set-Cookie count:", cookies.length);
-    console.log(
-      "Backend cookie names:",
-      cookies.map((c) => c.split("=")[0]),
-    );
-    // test
     const data = await response.json();
-    console.log({ data });
     const nextResponse = NextResponse.json({ data }, { status: 200 });
     for (const cookie of cookies) {
-      nextResponse.headers.append("Set-Cookie", cookie);
+      nextResponse.headers.append(
+        "Set-Cookie",
+        makeCookieLocalToThisSite(cookie, req.url),
+      );
     }
     return nextResponse;
   } catch (error) {

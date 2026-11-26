@@ -23,6 +23,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "../context/AuthContext"; // ← added
 import { useRouter, useSearchParams } from "next/navigation"; // ← added
+import { loadCatalog } from "./catalog";
 
 interface Product {
   id: string;
@@ -394,14 +395,19 @@ interface CartItem {
 }
 
 const getProductImage = (product: Product) =>
-  product.image.find((image) => image.startsWith("/"));
+  product.image.find((image) => image.startsWith("/") || image.startsWith("https://"));
 
 export default function ShopPage() {
+  const [catalogProducts, setCatalogProducts] = useState<Product[]>([]);
+  useEffect(() => {
+    loadCatalog().then(setCatalogProducts).catch(() => console.error("Unable to load published catalog products."));
+  }, []);
+  const displayedProducts = [...catalogProducts, ...productsData.filter((item) => !catalogProducts.some((product) => product.id === item.id))];
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const { isAuthenticated } = useAuth(); // ← use auth state
   const router = useRouter();
   const searchParams = useSearchParams();
-  const queuedProduct = productsData.find(
+  const queuedProduct = displayedProducts.find(
     (product) => product.id === searchParams.get("addToCart"),
   );
   const [cart, setCart] = useState<CartItem[]>(() =>
@@ -427,10 +433,17 @@ export default function ShopPage() {
   useEffect(() => {
     if (!queuedProduct) return;
 
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete("addToCart");
-    const query = params.toString();
-    router.replace(query ? `/Shop?${query}` : "/Shop", { scroll: false });
+    const timer = window.setTimeout(() => {
+      if (queuedProduct.stock > 0) {
+        setCart((current) => current.some((item) => item.product.id === queuedProduct.id) ? current : [...current, { product: queuedProduct, quantity: 1 }]);
+        setIsCartOpen(true);
+      }
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("addToCart");
+      const query = params.toString();
+      router.replace(query ? `/Shop?${query}` : "/Shop", { scroll: false });
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, [queuedProduct, router, searchParams]);
 
   const setSearchTerm = (term: string) => {
@@ -477,7 +490,7 @@ export default function ShopPage() {
     setCart((prev) => prev.filter((item) => item.product.id !== id));
   };
 
-  const filteredProducts = productsData.filter((p) => {
+  const filteredProducts = displayedProducts.filter((p) => {
     const matchesSearch =
       p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       p.specs.some((spec) =>
@@ -619,7 +632,7 @@ export default function ShopPage() {
                       <div>
                         <div className="h-36 bg-zinc-900 rounded-xl mb-4 flex items-center justify-center border border-yellow-500/5 relative overflow-hidden group-hover:border-yellow-500/10 transition-colors">
                           {getProductImage(product) ? (
-                            <Image
+                            <Image unoptimized
                               src={getProductImage(product) ?? ""}
                               alt={product.name}
                               fill
@@ -750,7 +763,7 @@ export default function ShopPage() {
                       >
                         <div className="relative w-16 h-16 bg-zinc-900 border border-zinc-800 rounded-xl flex items-center justify-center shrink-0 overflow-hidden">
                           {getProductImage(item.product) ? (
-                            <Image
+                            <Image unoptimized
                               src={getProductImage(item.product) ?? ""}
                               alt={item.product.name}
                               fill
